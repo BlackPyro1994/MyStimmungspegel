@@ -39,7 +39,7 @@
         <div class="collapse navbar-collapse" id="menu">
           <ul class="nav navbar-nav navbar-right">
             <li class="text-right"><a href="/search.html">Suche</a></li>
-            <li class="text-right"><a href="/add.html">Hinzufügen</a></li>
+            <li class="text-right"><a href="#">Hinzufügen</a></li>
             <li class="text-right"><a href="#">Suchoptionen</a></li>
             <li class="text-right"><a href="#">About</a></li>
           </ul>
@@ -51,47 +51,68 @@
       <div class="row">
         <!-- Map -->
         <div class="col-xs-12 col-md-6">
-          <div class="map" id="map-canvas"></div>
+            <h3>Hinzufügen</h3>
+            <form style="postion: relative; top: 10px" action="#" method="post">
+              <div class="form-group">
+                <label for="name" class="sr-only">Name des Lokals</label>
+                <input class="form-control" type="text" name="name" placeholder="Name des Lokals">
+              </div>
+              <div class="form-group">
+                <label for="type">Art des Lokals</label>
+                <select class="form-control" name="type" id="type">
+                  <option value="0">Kneipe</option>
+                  <option value="1">Club</option>
+                  <option value="2">Bar</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="admission" class="sr-only">Eintritt</label>
+                <input class="form-control" type="text" name="admission" id="admission" placeholder="Eintritt">
+              </div>
+              <div class="form-group">
+                <label for="beer-price" class="sr-only">Bierpreis</label>
+                <input class="form-control" type="text" name="beer-price" id="beer-price" placeholder="Bierpreis">
+              </div>
+            </form>
         </div>
 
 
         <!-- Top Ten oder so... -->
         <div class="col-xs-12 col-md-6">
-          <h4>Beste Stimmung im Umkreis von ...:</h4>
-          <div class="pre-scrollable">
-            <div class="well">
-              <p>Club 1</p>
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#gps" aria-controls="gps" role="tab" data-toggle="tab">GPS</a>
+              </li>
+              <li role="presentation">
+                <a href="#address" aria-controls="profile" role="tab" data-toggle="tab">Adresse</a>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="gps">
+                <div class="map" id="map-canvas"></div>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="address">
+                <br>
+                <form action="#" method="post">
+                  <div class="form-group">
+                    <label class="sr-only" for="street"></label>
+                    <input class="form-control" type="text" name="street" id="street" placeholder="Straße">
+                  </div>
+                  <div class="form-group">
+                    <label class="sr-only" for="zipcode"></label>
+                    <input class="form-control" type="text" name="zipcode" id="zipcode" placeholder="Postleitzahl">
+                  </div>
+                  <div class="form-group">
+                    <label for="city" class="sr-only">Stadt</label>
+                    <input class="form-control" type="text" name="city" id="city" placeholder="Stadt">
+                  </div>
+                </form>
+              </div>
             </div>
 
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-          </div>
         </div>
+
       </div>
     </div>
 
