@@ -20,7 +20,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body onload="mapInit();">
     <!-- Navigationsleiste -->
     <nav class="navbar navbar-default">
       <div class="container">
@@ -38,7 +38,7 @@
         <!-- Das eigentliche Menü -->
         <div class="collapse navbar-collapse" id="menu">
           <ul class="nav navbar-nav navbar-right">
-            <li class="text-right"><a href="/search.html">Suche</a></li>
+            <li class="text-right"><a href="#">Suche</a></li>
             <li class="text-right"><a href="#">Hinzufügen</a></li>
             <li class="text-right"><a href="#">Suchoptionen</a></li>
             <li class="text-right"><a href="#">About</a></li>
@@ -57,40 +57,15 @@
 
         <!-- Top Ten oder so... -->
         <div class="col-xs-12 col-md-6">
-          <h4>Beste Stimmung im Umkreis von ...:</h4>
-          <div class="pre-scrollable">
-            <div class="well">
-              <p>Club 1</p>
-            </div>
+          <h4>Suche</h4>
 
-            <div class="well">
-              <p>Kneipe 2</p>
+          <form action="#" method="post">
+            <div class="form-group">
+              <label for="search-string" class="sr-only">Suchbegriff</label>
+              <input class="form-control "type="text" name="search-string" id="search-string" placeholder="Suchbegriff">
             </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-
-            <div class="well">
-              <p>Kneipe 2</p>
-            </div>
-          </div>
+            <button type="sbúbmit" class="form-control btn btn-primary">Suche</button>
+          </form>
         </div>
       </div>
     </div>
