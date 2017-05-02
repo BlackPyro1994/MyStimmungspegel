@@ -1,0 +1,25 @@
+{% extends "stimmungspegel/base.html" %}
+
+
+{% block content %}
+<div class="row">
+  <!-- Map -->
+  <div class="col-xs-12 col-md-6">
+    <div class="map" id="map-canvas"></div>
+  </div>
+
+
+  <!-- Top Ten oder so... -->
+  <div class="col-xs-12 col-md-6">
+    <h4>Suche</h4>
+
+    <form action="#" method="post">
+      <div class="form-group">
+        <label for="search-string" class="sr-only">Suchbegriff</label>
+        <input class="form-control "type="text" name="search-string" id="search-string" placeholder="Suchbegriff">
+      </div>
+      <button type="submit" class="form-control btn btn-primary">Suche</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
