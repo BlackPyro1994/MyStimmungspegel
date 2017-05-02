@@ -12,3 +12,6 @@ def add(request):
 
 def about(request):
     return render(request, 'stimmungspegel/about.html')
+
+def searchoptions(request):
+    return render(request, 'stimmungspegel/searchoptions.html')
