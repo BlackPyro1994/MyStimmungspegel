@@ -1,0 +1,99 @@
+{% extends "stimmungspegel/base.html" %}
+
+{% block title %}{{block.super}} – Suchoptionen{% endblock %}
+
+{% block content %}
+<div class="container">
+      <div class="row">
+          <div class="col-xs-12 col-md-6 col-md-offset-3">
+              <h1>Suchoptionen </h1>
+              <form class="form-horizontal">
+                  <div class="form-group">
+                      <label for="inputEmail3" class="col-sm-2 control-label">Art der Lokale : </label>
+                      <div class="col-sm-3 col-sm-offset-1">
+                         <label class="radio-inline"><input type="radio" name="optradio">Kneipen</label>
+                      </div>
+                      <div class="col-sm-3 col-sm-offset-0">
+                          <label class="radio-inline"><input type="radio" name="optradio">Bars</label>
+                      </div>
+                      <div class="col-sm-3 col-sm-offset-0">
+                          <label class="radio-inline"><input type="radio" name="optradio">Clubs</label>
+                      </div>
+                  </div>
+              </form>
+              <div class="row">
+                  <div class="col-xs-3">
+<!--
+<label>Art der Lokale :    </label>
+-->
+                  <form action="#" method="post">
+
+                      <div class="form-group">
+
+                          <label for="name" >Art der Lokale : </label>
+
+                      </div>
+
+                  </form>
+
+              </div>
+
+              <div class="col-xs-2 col-xs-offset-0">
+
+                  <label class="radio-inline"><input type="radio" name="optradio">Kneipen</label>
+
+              </div>
+
+              <div class="col-xs-2 col-xs-offset-1">
+
+                  <label class="radio-inline"><input type="radio" name="optradio">Bars</label>
+
+              </div>
+
+              <div class="col-xs-2 col-xs-offset-1">
+
+                  <label class="radio-inline"><input type="radio" name="optradio">Clubs</label>
+
+              </div>
+
+              <br>
+              <br>
+
+              <hr>
+
+<!--              <form action="#" method="post">
+
+                  <div class="form-group">
+
+                      <form action="#" method="post">
+
+                          <div class="form-group">
+
+                              <input class="form-control "type="text" name="search-string" id="search-string" placeholder="Suchbegriff">
+
+                          </div>
+
+                      </form>
+
+                  </div>
+
+              </form>
+
+    -->
+              <input class="form-control" type="text" name="name" placeholder="Straße">
+
+                      <br>
+
+                      <input class="form-control" type="text" name="name" placeholder="Postleitzahl">
+
+                      <br>
+
+                      <input class="form-control" type="text" name="name" placeholder="Stadt">
+
+              </div>
+
+          </div>
+
+        </div>
+
+      </div>{% endblock %}
