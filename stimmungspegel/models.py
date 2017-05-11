@@ -13,7 +13,7 @@ class Location(models.Model):
 
     @property
     def rating(self):
-        return (sum( [r.rating for r in self.ratings] ) / self.ratings.count())
+        return sum( [r.value for r in self.rating_set.all()] ) / self.rating_set.count()
 
     def __str__(self):
         return self.name
@@ -21,11 +21,12 @@ class Location(models.Model):
 
 class Rating(models.Model):
     location = models.ForeignKey(Location)
-    rating = models.IntegerField(choices=[('1', 1), ('2', 2), ('3', 3), ('4', 4), ('5',5)])
+    value = models.IntegerField(choices=[('1', 1), ('2', 2), ('3', 3), ('4', 4), ('5',5)])
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{} - {}'.format(self.location.name, self.rating)
+        return '{} - {} - {}'.format(self.date, self.location.name ,self.value)
+
 
 class AudioSnippet(models.Model):
     location = models.ForeignKey(Location)
