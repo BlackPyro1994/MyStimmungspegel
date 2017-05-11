@@ -3,11 +3,11 @@ from django.db import models
 
 class Location(models.Model):
     name = models.CharField(max_length=100)
-    bierpreis = models.FloatField()
-    eintritt = models.FloatField()
-    strasse = models.CharField(max_length=255, blank=True, null=True)
-    plz = models.CharField(max_length=255, blank=True, null=True)
-    ort = models.CharField(max_length=255, blank=True, null=True)
+    beer_price = models.FloatField()
+    admission = models.FloatField()
+    street = models.CharField(max_length=255, blank=True, null=True)
+    zipcode = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=255, blank=True, null=True)
     position_lat = models.FloatField(blank=True, null=True)
     position_lon = models.FloatField(blank=True, null=True)
 
