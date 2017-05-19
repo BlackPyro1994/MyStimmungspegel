@@ -13,10 +13,8 @@ class Location(models.Model):
     position_lon = models.FloatField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        """
-        Vor dem speichern: Umwandlung Adresse -> GPS-Koordinaten und vice versa
-        über OpenStreetMap (mit der Bibliothek 'geocoder')
-        """
+        # Vor dem speichern in der DB:
+        # Umwandlung Adresse -> GPS-Koordinaten und vice versa
         if not (self.position_lat and self.position_lon):
             pos = geocoder.osm('{}, {} {}'.format(self.address, self.zipcode, self.city))
             self.position_lat = pos.lat
@@ -28,18 +26,27 @@ class Location(models.Model):
             self.city = pos.city
         super().save(*args, **kwargs)
 
-    def distance_to(self, lat_, lng_):
-        radius = 6371
-        lat = math.radians(self.position_lat - lat_)
-        lon = math.radians(self.position_lon - lng_)
-        a = math.sin(lat / 2)**2 + \
-            math.cos(math.radians(lat_)) * math.cos(math.radians(self.position_lat)) * \
-            math.sin(lon/2)**2
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-        return abs(radius * c)
+    def distance_to(self, lat, lon):
+        """
+        Berechnet die Distanz (in Kilometern) zu der durch 'lat' und 'lon'
+        gegebenen Position.
+
+        @param lat  Breitengrad (float)
+        @param lon  Längengrad (float)
+        @return Distanz in km (float)
+        """
+        l = (self.position_lat + lat) / 2 * 0.01745
+        dx = 111.3 * math.cos(l) * (self.position_lon - lon)
+        dy = 111.3 * (self.position_lat - lat)
+        return math.sqrt(dx*dx + dy*dy)
 
     @property
     def rating(self):
+        """
+        Berechnet den Durchschnitt aller abgegebenen Bewertungen
+
+        @return Durchschnittliche Bewertung (float)
+        """
         return sum( [r.value for r in self.rating_set.all()] ) / self.rating_set.count()
 
     def __str__(self):

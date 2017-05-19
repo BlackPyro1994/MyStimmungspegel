@@ -24,9 +24,9 @@ def get_locations(request):
             lon = float(data['lon'])
             radius = float(data['radius'])
             ret = []
+            # FIXME: Die performance der folgenden drei Zeilen wird sooo scheiße sein...
             for location in models.Location.objects.all():
-                # FIXME: Die performance wird sooo scheiße sein...
-                if location.distance_to(lat, lon) < radius:
+                if location.distance_to(lat, lon) <= radius:
                     ret.append(location)
         else:
             ret = models.Location.objects.all()
