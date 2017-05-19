@@ -1,15 +1,32 @@
 from django.db import models
 import math
+import geocoder
 
 class Location(models.Model):
     name = models.CharField(max_length=100)
     beer_price = models.FloatField()
     admission = models.FloatField()
-    street = models.CharField(max_length=255, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
     zipcode = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
     position_lat = models.FloatField(blank=True, null=True)
     position_lon = models.FloatField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Vor dem speichern: Umwandlung Adresse -> GPS-Koordinaten und vice versa
+        über OpenStreetMap (mit der Bibliothek 'geocoder')
+        """
+        if not (self.position_lat and self.position_lon):
+            pos = geocoder.osm('{}, {} {}'.format(self.address, self.zipcode, self.city))
+            self.position_lat = pos.lat
+            self.position_lon = pos.lng
+        else:
+            pos = geocoder.osm([self.position_lat, self.position_lon])
+            self.address = pos.address
+            self.zipcode = pos.zipcode
+            self.city = pos.city
+        super().save(*args, **kwargs)
 
     def distance_to(self, lat_, lng_):
         radius = 6371

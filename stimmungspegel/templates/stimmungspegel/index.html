@@ -10,8 +10,8 @@
 
   <!-- Top Ten oder so... -->
   <div class="col-xs-12 col-md-6">
-    <h4>Beste Stimmung im Umkreis von ...:</h4>
-    <div class="pre-scrollable">
+    <h4> Beste Stimmung im Umkreis von <span id="radius">...</span>:</h4>
+    <div id="location_list" class="pre-scrollable">
       <div class="well well-sm">
         <p>Club 1</p>
       </div>
@@ -46,4 +46,40 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block jquery %}
+<script>
+  $(document).ready(function () {
+
+    $.ajax({
+      type: "POST",
+      url: "{% url 'getlocations' %}",
+      dataType: "json",
+      data: {
+        lat: 51.133333,
+        lon: 10.416667,
+        radius: 400.0,
+        ordering: 'rating'
+      }
+    })
+    .done(function(locations) {
+      $("#radius").html("400km");
+      $("#location_list").empty();
+      locations.forEach(function(location, index, array) {
+        $("#location_list").append(
+          '<div class="well well-sm">' +
+          '<p>' + location.name + '</p>' +
+          '<p><b>Rating:</b> ' + location.rating + '</p>' +
+          '</div>'
+        );
+      });
+    })
+    .fail(function(xhr, status, errorThrown) {
+      console.log("Error: " + errorThrown);
+      console.log("Status: " + status);
+    });
+
+  });
+</script>
 {% endblock %}
