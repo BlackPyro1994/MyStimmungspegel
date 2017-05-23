@@ -9,6 +9,7 @@
     zipcode: 50679
     city: Köln
 
+
 - model: stimmungspegel.Location
   pk: 2
   fields:
