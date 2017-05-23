@@ -1,0 +1,98 @@
+- model: stimmungspegel.Location
+  pk: 1
+  fields:
+    name: Freiheit
+    kind: 0
+    beer_price: 0
+    admission: 0
+    address: Justinianstraße 1
+    zipcode: 50679
+    city: Köln
+
+- model: stimmungspegel.Location
+  pk: 2
+  fields:
+    name: Em Bierstüssge
+    kind: 0
+    beer_price: 0
+    admission: 0
+    address: Graf-Geßler-Straße 1
+    zipcode: 50679
+    city: Köln
+
+- model: stimmungspegel.Location
+  pk: 3
+  fields:
+    name: Sion Bräues / Antik Brauhaus
+    kind: 0
+    beer_price: 0
+    admission: 0
+    address: Deutzer Freiheit 85-87
+    zipcode: 50679
+    city: Köln
+
+- model: stimmungspegel.Location
+  pk: 4
+  fields:
+    name: Lotta
+    kind: 0
+    beer_price: 0
+    admission: 0
+    address: Kartäuserwall 10
+    zipcode: 50678
+    city: Köln
+
+- model: stimmungspegel.Location
+  pk: 5
+  fields:
+    name: Stiefel
+    kind: 0
+    beer_price: 0
+    admission: 0
+    address: Zülpicher Straße 18a
+    zipcode: 50674
+    city: Köln
+
+- model: stimmungspegel.Location
+  pk: 6
+  fields:
+    name: Cubana
+    kind: 1
+    beer_price: 0
+    admission: 0
+    address: Zülpicher Straße 36
+    zipcode: 50674
+    city: Köln
+
+- model: stimmungspegel.Location
+  pk: 7
+  fields:
+    name: miniBar
+    kind: 1
+    beer_price: 0
+    admission: 0
+    address: Zülpicher Straße 37
+    zipcode: 50674
+    city: Köln
+
+- model: stimmungspegel.Location
+  pk: 8
+  fields:
+    name: Underground
+    kind: 2
+    beer_price: 0
+    admission: 0
+    address: Vogelsanger Straße 200
+    zipcode: 50825
+    city: Köln
+
+- model: stimmungspegel.Location
+  pk: 9
+  fields:
+    name: Sonic Ballroom
+    kind: 0
+    beer_price: 0
+    admission: 0
+    address: Oskar-Jäger-Straße 180
+    zipcode: 50825
+    city: Köln

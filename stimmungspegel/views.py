@@ -51,3 +51,4 @@ def get_ratings(request, location_id):
     ratings = models.Rating.objects.filter(location_id=location_id).order_by('-date')
     ser = serializers.RatingSerializer(ratings, many=True)
     return JsonResponse(ser.data, safe=False)
+
