@@ -11,40 +11,9 @@
   <!-- Top Ten oder so... -->
   <div class="col-xs-12 col-md-6">
     <h4> Beste Stimmung im Umkreis von <span id="radius">...</span>:</h4>
-    <div id="location_list" class="pre-scrollable">
-      <div class="well well-sm">
-        <p>Club 1</p>
-      </div>
-
-      <div class="well well-sm">
-        <p>Kneipe 2</p>
-      </div>
-
-      <div class="well well-sm">
-        <p>Kneipe 2</p>
-      </div>
-
-      <div class="well well-sm">
-        <p>Kneipe 2</p>
-      </div>
-
-      <div class="well well-sm">
-        <p>Kneipe 2</p>
-      </div>
-
-      <div class="well well-sm">
-        <p>Kneipe 2</p>
-      </div>
-
-      <div class="well well-sm">
-        <p>Kneipe 2</p>
-      </div>
-
-      <div class="well well-sm">
-        <p>Kneipe 2</p>
-      </div>
+    <div id="location_list">
+      <div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>  
     </div>
-  </div>
 </div>
 {% endblock %}
 
@@ -69,22 +38,29 @@
       url: "{% url 'getlocations' %}",
       dataType: "json",
       data: {
-        lat: 51.133333,
-        lon: 10.416667,
-        radius: 400.0
+        lat: 50.938361,
+        lon: 6.959974,
+        radius: 10.0
       }
     })
     .done(function(locations) {
-      $("#radius").html("400km");
+      $("#radius").html("10km");
       $("#location_list").empty();
       
-      locations.sort(byBeerPrice);
+      locations.sort(byRating);
       
       locations.forEach(function(location, index, array) {
+        var rating_html = '';
+        for (var i = 0; i < location.rating.toFixed(); i++) {
+          rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
+        }
+        for (var i = 0; i < 5 - location.rating.toFixed(); i++) {
+          rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>"; 
+        }
         $("#location_list").append(
-          '<div class="well well-sm">' +
-          '<p>' + location.name + '</p>' +
-          '<p><b>Rating:</b> ' + location.rating + '</p>' +
+          '<div class="location well well-sm"' +
+          '<p><b><a href="/detail/' + location.id + '">' + location.name + '</a></b></p>' +
+          '<p>Stimmung: ' + rating_html + '</p>' +
           '<p>Bierpreis: ' + location.beer_price + '€</p>' +
           '</div>'
         );
@@ -93,8 +69,9 @@
     .fail(function(xhr, status, errorThrown) {
       console.log("Error: " + errorThrown);
       console.log("Status: " + status);
+      $("#location_list").empty();
+      $("#location_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
     });
-
   });
 </script>
 {% endblock %}

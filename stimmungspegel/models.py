@@ -2,6 +2,7 @@ from django.db import models
 import math
 import geocoder
 
+
 class Location(models.Model):
     kind_choices = (('Kneipe', 0), ('Bar', 1), ('Club', 2))
 
@@ -68,7 +69,7 @@ class Location(models.Model):
         @return Durchschnittliche Bewertung (float), 0 wenn keine Bewertungen vorhanden
         """
         if self.rating_set.count() > 0:
-            return sum( [r.value for r in self.rating_set.all()] ) / self.rating_set.count()
+            return sum([r.value for r in self.rating_set.all()]) / self.rating_set.count()
         return 0
 
     def __str__(self):
@@ -77,11 +78,11 @@ class Location(models.Model):
 
 class Rating(models.Model):
     location = models.ForeignKey(Location)
-    value = models.IntegerField(choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5,5)])
+    value = models.IntegerField(choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)])
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{} - {} - {}'.format(self.date, self.location.name ,self.value)
+        return '{} - {} - {}'.format(self.date, self.location.name, self.value)
 
 
 class AudioSnippet(models.Model):

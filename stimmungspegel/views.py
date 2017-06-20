@@ -1,9 +1,15 @@
-import json
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponseNotAllowed, Http404
+from django.views.generic import DetailView
+from django.http import JsonResponse, HttpResponseNotAllowed
 from stimmungspegel import models
 from stimmungspegel import serializers
+
+
+class LocationDetail(DetailView):
+    model = models.Location
+    template_name = 'stimmungspegel/detail.html'
+
 
 @csrf_exempt
 def get_locations(request):
@@ -36,6 +42,7 @@ def get_locations(request):
         return JsonResponse(ser.data, safe=False)
     raise HttpResponseNotAllowed(['POST'])
 
+
 @csrf_exempt
 def rate(request, location_id):
     if request.method == 'POST':
@@ -47,8 +54,8 @@ def rate(request, location_id):
         return JsonResponse({'location_id': location_id, 'new_rating': location.rating})
     return HttpResponseNotAllowed(['POST'])
 
+
 def get_ratings(request, location_id):
     ratings = models.Rating.objects.filter(location_id=location_id).order_by('-date')
     ser = serializers.RatingSerializer(ratings, many=True)
     return JsonResponse(ser.data, safe=False)
-
