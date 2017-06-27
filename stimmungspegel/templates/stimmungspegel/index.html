@@ -4,7 +4,7 @@
 <div class="row">
   <!-- Map -->
   <div class="col-xs-12 col-md-6">
-    <div class="map" id="map-canvas"></div>
+    <div class="map" id="map"></div>
   </div>
 
   <!-- Top Ten oder so... -->
@@ -32,7 +32,10 @@
         else if (a.beer_price < b.beer_price) return -1;
         return 0;
     }
-
+    
+    map = StimmungspegelMap();
+    map.createMap(6.959974, 50.938361, 12);
+    
     $.ajax({
       type: "POST",
       url: "{% url 'getlocations' %}",
@@ -64,6 +67,10 @@
           '<p>Bierpreis: ' + location.beer_price + '€</p>' +
           '</div>'
         );
+        map.addMarker(location.id, location.position_lon, location.position_lat);
+        map.onMarkerSingleClick(location.id, function() {
+          window.location = "/detail/" + location.id;
+        });
       });
     })
     .fail(function(xhr, status, errorThrown) {
