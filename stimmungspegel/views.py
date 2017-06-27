@@ -9,6 +9,7 @@ from stimmungspegel import serializers
 class LocationDetail(DetailView):
     model = models.Location
     template_name = 'stimmungspegel/detail.html'
+    context_object_name = 'location'
 
 
 @csrf_exempt
