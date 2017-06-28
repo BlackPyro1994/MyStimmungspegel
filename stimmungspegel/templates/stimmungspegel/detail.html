@@ -5,7 +5,7 @@
     <h1>{{ location.name }}</h1>
 
     <div class="col-xs-12 col-md-6">
-        <div class="map" id="map-canvas"></div>
+        <div class="map" id="map"></div>
     </div>
 
 
@@ -30,11 +30,6 @@
         </div>
 
     </div>
-
-    </div>
-
-    </div>
-
 {% endblock content %}
 
 {% block jquery %}
@@ -44,8 +39,8 @@
         $(document).ready(function () {
 
             map = StimmungspegelMap();
-            map.createMap({{ location.position_lon }}, {{ location.position_lat }}, 14);
-            map.addMarker(null, {{ location.position_lon }}, {{ location.position_lat }});
+            map.createMap({{ location.position_lon }}, {{ location.position_lat }}, 17);
+            map.addMarker(null, {{ location.position_lon }}, {{ location.position_lat }}, {kind: {{location.kind}}});
 
             // #############################################################################
 
@@ -76,7 +71,7 @@
                 dataType: "json"
             })
                 .done(function (ratings) {
-                    console.log("AJAX Erfolgreich !");
+                    console.log(ratings);
                     $("#ratings_list").empty();
 
                     ratings.forEach(function (rating, index, array) {

@@ -7,7 +7,7 @@
 <div class="row">
   <!-- Map -->
   <div class="col-xs-12 col-md-6">
-    <div class="map" id="map-canvas"></div>
+    <div class="map" id="map"></div>
   </div>
 
 
@@ -25,3 +25,10 @@
   </div>
 </div>
 {% endblock %}
+
+{% block jquery %}
+<script>
+  map = StimmungspegelMap();
+  map.createMap(6.959974, 50.938361, 12);
+</script>
+{% endblock jquery %}

@@ -5,7 +5,7 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Location
         fields = ('id', 'name', 'beer_price', 'admission', 'address', 'zipcode',
-                  'city', 'position_lat', 'position_lon', 'rating')
+                  'city', 'position_lat', 'position_lon', 'rating', 'kind')
 
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:

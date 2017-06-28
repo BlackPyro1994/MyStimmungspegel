@@ -67,7 +67,7 @@
           '<p>Bierpreis: ' + location.beer_price + '€</p>' +
           '</div>'
         );
-        map.addMarker(location.id, location.position_lon, location.position_lat);
+        map.addMarker(location.id, location.position_lon, location.position_lat, location);
         map.onMarkerSingleClick(location.id, function() {
           window.location = "/detail/" + location.id;
         });
