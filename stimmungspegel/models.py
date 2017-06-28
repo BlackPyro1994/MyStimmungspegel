@@ -88,7 +88,7 @@ class Rating(models.Model):
 class AudioSnippet(models.Model):
     location = models.ForeignKey(Location)
     date = models.DateTimeField(auto_now_add=True)
-    data = models.BinaryField()
+    data = models.FileField(upload_to='audiosnippets/')
 
     def __str__(self):
         return '{} {}'.format(self.date, self.location.name)
