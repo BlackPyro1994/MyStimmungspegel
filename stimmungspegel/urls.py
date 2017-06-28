@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^searchoptions$', TemplateView.as_view(template_name='stimmungspegel/searchoptions.html'), name='searchoptions'),
 
     url(r'^detail/(?P<pk>[0-9]+)$', views.LocationDetail.as_view(), name='detail'),
+    url(r'^upload_audio/(?P<location_id>[0-9]+)$', views.upload_audio, name='upload_audio'),
 
     url(r'^api/getlocations$', views.get_locations, name='getlocations'),
     url(r'^api/rate/(?P<location_id>[0-9]+)$', views.rate, name='rate'),

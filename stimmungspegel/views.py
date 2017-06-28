@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView
-from django.http import JsonResponse, HttpResponseNotAllowed
+from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponse
 from stimmungspegel import models
 from stimmungspegel import serializers
 
@@ -12,7 +11,6 @@ class LocationDetail(DetailView):
     context_object_name = 'location'
 
 
-@csrf_exempt
 def get_locations(request):
     """
     Gibt eine Liste von 'Location'-Objeckten zurück. Aufruf über Ajax (POST)
@@ -44,9 +42,8 @@ def get_locations(request):
     raise HttpResponseNotAllowed(['POST'])
 
 
-@csrf_exempt
 def rate(request, location_id):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.is_ajax():
         location = get_object_or_404(models.Location, id=location_id)
         rating = models.Rating()
         rating.location = location
@@ -60,3 +57,22 @@ def get_ratings(request, location_id):
     ratings = models.Rating.objects.filter(location_id=location_id).order_by('-date')
     ser = serializers.RatingSerializer(ratings, many=True)
     return JsonResponse(ser.data, safe=False)
+
+
+def upload_audio(request, location_id):
+    if request.method == 'POST' and request.is_ajax():
+        location = get_object_or_404(models.Location, id=location_id)
+        snippet = models.AudioSnippet()
+        snippet.location = location
+        snippet.data = request.FILE['snippet']
+        snippet.save()
+        return HttpResponse(status=200)
+    return HttpResponseNotAllowed(['POST'])
+
+
+def search(request):
+    pass
+
+
+def add_location(request):
+    pass

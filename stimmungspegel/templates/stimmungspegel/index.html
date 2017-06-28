@@ -40,6 +40,9 @@
       type: "POST",
       url: "{% url 'getlocations' %}",
       dataType: "json",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('X-CSRFToken', "{{csrf_token}}");
+      },
       data: {
         lat: 50.938361,
         lon: 6.959974,
