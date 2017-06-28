@@ -19,32 +19,43 @@
                 </form>
             </div>
             <div class="col-xs-2 col-xs-offset-0">
-                <label class="radio-inline"><input type="checkbox" name="optradio">Kneipen</label>
+                <label class="radio-inline"><input type="checkbox" id="KneipeID" name="optradio">Kneipen</label>
             </div>
 
             <div class="col-xs-2 col-xs-offset-1">
-                <label class="radio-inline"><input type="checkbox" name="optradio">Bars</label>
+                <label class="radio-inline"><input type="checkbox" id="BarsID" name="optradio">Bars</label>
             </div>
             <div class="col-xs-2 col-xs-offset-1">
-                <label class="radio-inline"><input type="checkbox" name="optradio">Clubs</label>
+                <label class="radio-inline"><input type="checkbox" id="ClubsID" name="optradio">Clubs</label>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-xs-3 col-xs-offset-1">
+        <br>
 
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Dropdown
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#">Keine Ahnung</a></li>
-                        <li><a href="#">Muss nochmal Sven fragen</a></li>
-                        <li><a href="#">Keine Ahnung</a></li>
-                    </ul>
-                </div>
+        <hr>
+
+        <br>
+
+        <div class="row">
+            <div class="col-xs-3">
+                <!--
+                <label>Art der Lokale :    </label>
+                -->
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <label for="name">Sortieren nach : </label>
+                    </div>
+                </form>
+            </div>
+            <div class="col-xs-2 col-xs-offset-0">
+                <label class="radio-inline"><input type="radio" name="optradio">Bierpreis</label>
+            </div>
+
+            <div class="col-xs-2 col-xs-offset-1">
+                <label class="radio-inline"><input type="radio" name="optradio">Eintritt</label>
+            </div>
+            <div class="col-xs-2 col-xs-offset-1">
+                <label class="radio-inline"><input type="radio" name="optradio">Stimmung</label>
             </div>
         </div>
 
@@ -57,10 +68,22 @@
 
         <div class="row">
 
+
             <div class="col-xs-2">
-                <label class="radio-inline"><input type="radio" name="optradio">Karte auf GPS-Position
+                <label for="name">Lokalisierung : </label>
+            </div>
+
+            <div class="col-xs-4 col-xs-offset-1">
+                <label class="radio-inline" style="font-size: 17px"><input type="radio" name="optradio">Karte auf
+                    GPS-Position
                     zentrieren</label>
             </div>
+
+            <div class="col-xs-3 col-xs-offset-2">
+                <label class="radio-inline" style="font-size: 17px"><input type="radio" name="optradio">Karte auf
+                    Adresse zentrieren</label>
+            </div>
+
 
         </div>
 
@@ -68,13 +91,6 @@
         <br>
 
         <div class="row">
-
-            <div class="col-xs-2">
-                <label class="radio-inline"><input type="radio" name="optradio">Karte auf Adresse zentrieren</label>
-            </div>
-
-            <br>
-            <br>
 
             <hr>
 
@@ -89,7 +105,7 @@
                               </div>
                           </form>
                 -->
-            <input class="form-control" type="text" name="name" placeholder="Straße">
+            <input class="form-control" type="text" name="name" placeholder="Stadt">
 
             <br>
 
@@ -97,9 +113,57 @@
 
             <br>
 
-            <input class="form-control" type="text" name="name" placeholder="Stadt">
+            <input class="form-control" type="text" name="name" placeholder="Straße">
+
+            <br>
+
+            <button type="submit" onclick="foo()" class="form-control btn btn-primary">Speichern</button>
+
 
         </div>
     </div>
     </div>
     </div>{% endblock %}
+
+{% block jquery %}
+    <script>
+
+    function foo() {
+        {% comment %}alert(document.getElementById('search-string').value);{% endcomment %}
+
+        var type;
+
+        if(document.getElementById("KneipeID").checked)
+        {type.append("1")}else{type.append("0")}
+
+        if(document.getElementById("BarsID").checked)
+        {type.append("1")}else{type.append("0")}
+
+        if(document.getElementById("ClubsID").checked)
+        {type.append("1")}else{type.append("0")}
+
+        setCookie("type",type,1);
+
+        return true;
+    }
+
+    $(document).ready(function ()
+    {
+        if (getCookie("type").toString().charAt(0)) {
+            document.getElementById("KneipeID").checked = true;
+        }
+        if (getCookie("type").toString().charAt(1)) {
+            document.getElementById("BarsID").checked = true;
+        }
+
+        if (getCookie("type").toString().charAt(2)) {
+            document.getElementById("ClubsID").checked = true;
+        }
+    })
+    ;
+
+
+</script>
+
+{% endblock jquery %}
+
