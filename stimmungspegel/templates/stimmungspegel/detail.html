@@ -40,6 +40,10 @@
 {% block jquery %}
     <script>
 
+    map = StimmungspegelMap();
+    map.createMap({{ location.position_lon }}, {{ location.position_lat }}, 14);
+    map.addMarker(null ,{{ location.position_lon }}, {{ location.position_lat }});
+
     $(document).ready(function () {
         // #############################################################################
 
