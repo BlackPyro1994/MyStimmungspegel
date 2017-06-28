@@ -2,7 +2,7 @@
  * Created by Alexander on 28.06.2017.
  */
 
-function readCookie(name) {
+var getCookie = function(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
     for(var i=0;i < ca.length;i++) {
@@ -13,7 +13,7 @@ function readCookie(name) {
     return null;
 }
 
-function setCookie(c_name, value, exdays) {
+var setCookie = function(c_name, value, exdays) {
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + exdays);
     var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
