@@ -1,6 +1,113 @@
 {% extends "stimmungspegel/base.html" %}
 
 {% block content %}
-    <h1>{{location.name}}</h1>
-    {% endfor %}
+
+    <h1>{{ location.name }}</h1>
+
+    <div class="col-xs-12 col-md-6">
+        <div class="map" id="map-canvas"></div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+
+            <!--<span id="spanStage"></span>-->
+
+            <div class="col-xs-4 col-xs-offset-0">
+                <h4>Bierpreis : {{ location.beer_price }}</h4>
+            </div>
+
+            <div class="col-xs-4 col-xs-offset-1">
+                <h4> € Eintritt : {{ location.admission }}</h4>
+            </div>
+        </div>
+
+        <div class="col-xs-4 col-xs-offset-0" id="rating"></div>
+
+        <div class="col-xs-4 col-xs-offset-0" id="ratings_list">
+            <div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>
+        </div>
+
+    </div>
+
+    </div>
+
+    </div>
+
 {% endblock content %}
+
+{% block jquery %}
+    <script>
+
+    $(document).ready(function () {
+        // #############################################################################
+
+        var rating = {{ location.rating }};
+
+        var rating_html = '';
+
+        for (var i = 0; i < rating.toFixed(); i++) {
+            rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
+        }
+
+        for (var i = 0; i < 5 - rating.toFixed(); i++) {
+            rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>";
+        }
+
+        $("#rating").append
+        (
+            '<div class="text-center" style="font-size: 45px">' +
+            '<p>' + rating_html + '</p>' +
+            '</div>'
+        );
+
+        // #######################################################################################
+
+        $.ajax({
+            type: "GET",
+            url: "{% url 'getratings' location_id=location.pk %}",
+            dataType: "json"
+        })
+            .done(function (ratings) {
+                console.log("AJAX Erfolgreich !");
+                $("#ratings_list").empty();
+
+                ratings.forEach(function (rating, index, array) {
+                    var rating_html = '';
+                    for (var i = 0; i < rating.value.toFixed(); i++) {
+                        rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
+                    }
+                    for (var i = 0; i < 5 - rating.value.toFixed(); i++) {
+                        rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>";
+                    }
+
+                    var date = new Date(rating.date);
+                    // date.toLocaleDateString('de-DE');
+
+                    $("#ratings_list").append
+                    (
+                        '<div class="ratings well well-sm"' +
+                        {% comment %}'<p><b>' + rating.date.toString().slice(0,10) + '   ' + rating.date.toString().slice(10) + '</a></b></p>' +{% endcomment %}
+                        '<p><b>' + date.toDateString() + "--- " + date.toLocaleTimeString() + '</a></b></p>' +
+                        '<p>Stimmung: ' + rating_html + '</p>' +
+                        '</div>'
+                    );
+                });
+            })
+                .fail(function (xhr, status, errorThrown)
+                {
+                    console.log("VERDAMMTES AJAX !!!");
+
+                    console.log("Error: " + errorThrown);
+                    console.log("Status: " + status);
+
+                    $("#ratings_list").empty();
+                    $("#ratings_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
+
+                });
+        });
+
+    </script>
+{% endblock %}
+
