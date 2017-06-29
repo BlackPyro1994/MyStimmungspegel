@@ -23,14 +23,20 @@ var setCookie = function(c_name, value, exdays) {
 // Sortierfunktionen
 
 var byRating = function(a, b) {
-      if(a.rating < b.rating) return 1;
-      else if (a.rating > b.rating) return -1;
-      return 0;
-    }
+  if(a.rating < b.rating) return 1;
+  else if (a.rating > b.rating) return -1;
+  return 0;
+}
 
 var byBeerPrice = function(a, b) {
   if(a.beer_price > b.beer_price) return 1;
   else if (a.beer_price < b.beer_price) return -1;
+  return 0;
+}
+
+var byAdmission = function(a, b) {
+  if(a.admission > b.admission) return 1;
+  else if (a.admission < b.admission) return -1;
   return 0;
 }
 
