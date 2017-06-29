@@ -35,10 +35,6 @@ var byBeerPrice = function(a, b) {
 }
 
 
-// Geolocation
-
-
-
 // Map
 
 var StimmungspegelMap = function() {
