@@ -20,7 +20,7 @@
 {% block jquery %}
 <script>
   $(document).ready(function () {
-
+    
     function byRating(a, b) {
         if(a.rating < b.rating) return 1;
         else if (a.rating > b.rating) return -1;
@@ -35,6 +35,15 @@
     
     map = StimmungspegelMap();
     map.createMap(6.959974, 50.938361, 12);
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        alert(position.coords.latitude + ', ' + position.coords.longitude);
+        map.addMarker(null, position.coords.longitude, position.coords.latitude, null);
+      });
+    } else{
+      alert('Nope...');
+    }
     
     $.ajax({
       type: "POST",

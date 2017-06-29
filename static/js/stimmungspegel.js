@@ -1,3 +1,46 @@
+
+// Cookie-Verwaltung
+
+var getCookie = function(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+var setCookie = function(c_name, value, exdays) {
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+    document.cookie = c_name + "=" + c_value;
+}
+
+
+// Sortierfunktionen
+
+var byRating = function(a, b) {
+      if(a.rating < b.rating) return 1;
+      else if (a.rating > b.rating) return -1;
+      return 0;
+    }
+
+var byBeerPrice = function(a, b) {
+  if(a.beer_price > b.beer_price) return 1;
+  else if (a.beer_price < b.beer_price) return -1;
+  return 0;
+}
+
+
+// Geolocation
+
+
+
+// Map
+
 var StimmungspegelMap = function() {
   var map;
   var markerClickCallbacks;
