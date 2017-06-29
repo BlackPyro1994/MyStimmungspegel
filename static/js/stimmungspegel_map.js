@@ -43,7 +43,6 @@ var StimmungspegelMap = function() {
       var geom = new ol.geom.Point(ol.proj.transform([lon, lat], "EPSG:4326", "EPSG:3857"));
       var feature = new ol.Feature(geom);
 
-      console.log(data.kind);
       var iconUrl = "https://openlayers.org/en/v3.19.1/examples/data/icon.png";
       if (data != null) {
         if (data.kind == 0) {
