@@ -3,97 +3,102 @@
 {% block title %}{{ block.super }} – Suchoptionen{% endblock %}
 
 {% block content %}
+
+
     <div class="container">
 
-        <br>
-
         <div class="row">
-            <div class="col-xs-3">
-                <!--
-                <label>Art der Lokale :    </label>
-                -->
+
+            <div class="col-md-2 col-xs-10" style="margin:20px">
+                <button type="submit" onclick="foo()" class="form-control btn btn-primary">Speichern</button>
+            </div>
+
+            <div class="col-md-2 col-md-offset-1 col-xs-5 ">
                 <form action="#" method="post">
                     <div class="form-group">
                         <label for="name">Art der Lokale : </label>
                     </div>
                 </form>
             </div>
-            <div class="col-xs-2 col-xs-offset-0">
-                <label class="radio-inline"><input type="checkbox" id="KneipeID" name="optradio">Kneipen</label>
-            </div>
 
-            <div class="col-xs-2 col-xs-offset-1">
-                <label class="radio-inline"><input type="checkbox" id="BarsID" name="optradio">Bars</label>
-            </div>
-            <div class="col-xs-2 col-xs-offset-1">
-                <label class="radio-inline"><input type="checkbox" id="ClubsID" name="optradio">Clubs</label>
+            <div class="col-md-6 col-xs-5" style="border:1px solid #2aabd2;padding:5px;border-radius: 25px;margin:20px">
+                <div class="col-md-3 col-md-offset-1">
+                    <label class="radio-inline"><input type="checkbox"
+                                                       id="KneipeID"
+                                                       name="optradio">Kneipen</label>
+                </div>
+
+                <div class="col-md-3 col-md-offset-1">
+                    <label class="radio-inline"><input type="checkbox"
+                                                       id="BarsID"
+                                                       name="optradio">Bars</label>
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <label class="radio-inline"><input type="checkbox"
+                                                       id="ClubsID"
+                                                       name="optradio">Clubs</label>
+                </div>
             </div>
         </div>
 
-        <br>
-
         <hr>
 
-        <br>
-
         <div class="row">
-            <div class="col-xs-3">
-                <!--
-                <label>Art der Lokale :    </label>
-                -->
+            <div class="col-md-2">
                 <form action="#" method="post">
                     <div class="form-group">
                         <label for="name">Sortieren nach : </label>
                     </div>
                 </form>
             </div>
-            <div class="col-xs-2 col-xs-offset-1">
-                <label class="radio-inline"><input type="radio" id="StimmungRadio" checked="true" name="optradio">Stimmung</label>
+
+            <div class="col-md-6 col-xs-5" style="border:1px solid #2aabd2;padding:5px;border-radius: 25px;margin:20px">
+
+            <div class="col-md-1 col-md-offset-0 col-xs-0 col-xs-offset-0">
+                <label class="radio-inline"><input type="radio" id="StimmungRadio"
+                                                   checked="true" name="optradio">Stimmung</label>
             </div>
-            <div class="col-xs-2 col-xs-offset-0">
-                <label class="radio-inline"><input type="radio" id="BierpreisRadio" name="optradio">Bierpreis</label>
+            <div class="col-md-1 col-md-offset-0 col-xs-0 col-xs-offset-0">
+                <label class="radio-inline"><input type="radio" id="BierpreisRadio"
+                                                   name="optradio">Bierpreis</label>
             </div>
 
-            <div class="col-xs-2 col-xs-offset-1">
-                <label class="radio-inline"><input type="radio" id="EintrittRadio" name="optradio">Eintritt</label>
+            <div class="col-md-1 col-md-offset-0 col-xs-0 col-xs-offset-0">
+                <label class="radio-inline"><input type="radio" id="EintrittRadio"
+                                                   name="optradio">Eintritt</label>
             </div>
-
-        </div>
-
-        <br>
-        <br>
-
-        <hr>
-
-        <br>
-
-        <div class="row">
-
-
-            <div class="col-xs-2">
+            </div>
+            <div class="col-md-2 col-md-offset-1">
                 <label for="name">Lokalisierung : </label>
             </div>
 
-            <div class="col-xs-2 col-xs-offset-0">
-                <label class="radio-inline" style="font-size: 17px"><input type="radio" id="KarteGPS" name="optradio1">Karte
-                    auf
-                    GPS-Position
+            <div class="col-md-2 col-md-offset-0">
+                <label class="radio-inline" style="font-size: 17px"><input type="radio" id="KarteGPS" name="optradio1">Karte auf GPS-Position
                     zentrieren</label>
             </div>
 
-            <div class="col-xs-2 col-xs-offset-1">
-                <label class="radio-inline" style="font-size: 17px"><input type="radio" id="KarteAdresse" checked="true"
+            <div class="col-md-2 col-md-offset-0">
+                <label class="radio-inline" style="font-size: 17px"><input type="radio"
+                                                                           id="KarteAdresse"
+                                                                           checked="true"
                                                                            name="optradio1">Karte
                     auf
                     Adresse zentrieren</label>
             </div>
 
-            <div class="col-xs-2 col-xs-offset-1">
+        </div>
+
+        <hr>
+
+        <div class="row">
+
+
+            <div class="col-xs-2 col-xs-offset-0">
                 <label for="name">Radius : </label>
             </div>
 
             <div class="col-xs-1">
-                <select id="RadiusID">
+                <select id="RadiusID" style="width: 100px;height: 30px">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="5">5</option>
@@ -103,41 +108,24 @@
                 </select>
             </div>
 
+            <div class="col-md-7 col-md-offset-2 col-xs-offset-3">
 
-        </div>
+                <input class="form-control" id="StadtID" type="text" name="name"
+                       placeholder="Stadt">
 
+                <br>
 
-        <br>
+                <input class="form-control" id="PostleitzahlID" type="text" name="name"
+                       placeholder="Postleitzahl">
 
-        <div class="row">
+                <br>
 
-            <hr>
+                <input class="form-control" id="StreetID" type="text" name="name"
+                       placeholder="Street">
 
+                <br>
 
-            <!--              <form action="#" method="post">
-                              <div class="form-group">
-                                  <form action="#" method="post">
-                                      <div class="form-group">
-                                          <input class="form-control "type="text" name="search-string" id="search-string" placeholder="Suchbegriff">
-                                      </div>
-                                  </form>
-                              </div>
-                          </form>
-                -->
-            <input class="form-control" id="StadtID" type="text" name="name" placeholder="Stadt">
-
-            <br>
-
-            <input class="form-control" id="PostleitzahlID" type="text" name="name" placeholder="Postleitzahl">
-
-            <br>
-
-            <input class="form-control" id="StraßeID" type="text" name="name" placeholder="Straße">
-
-            <br>
-
-            <button type="submit" onclick="foo()" class="form-control btn btn-primary">Speichern</button>
-
+            </div>
 
         </div>
     </div>
@@ -147,174 +135,146 @@
 {% block jquery %}
     <script>
 
-        function foo() {
+            function foo() {
 
-            console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+                    console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
 
-            console.log("foo Aufruf on Click");
+                    console.log("foo Aufruf on Click");
 
-            {% comment %}alert(document.getElementById('search-string').value);{% endcomment %}
+                    {% comment %}alert(document.getElementById('search-string').value);{% endcomment %}
 
-            var type = "";
-            var radius = "";
-            var stadt = "";
-            var postleitzahl = "";
-            var straße = "";
+                    var type = "";
+                    var radius = "";
+                    var stadt = "";
+                    var postleitzahl = "";
+                    var street = "";
 
-            if (document.getElementById("KneipeID").checked) {
-                type = type + "1";
-                console.log("Kneipe : 1");
-            } else {
-                type = type + "0";
-                console.log("Kneipe : 0");
+                    if (document.getElementById("KneipeID").checked) {
+                            type = type + "1";
+
+                    } else {
+                            type = type + "0";
+
+                    }
+
+                    if (document.getElementById("BarsID").checked) {
+                            type = type + "1";
+                    } else {
+                            type = type + "0";
+                    }
+
+                    if (document.getElementById("ClubsID").checked) {
+                            type = type + "1";
+                    } else {
+                            type = type + "0";
+                    }
+
+                    if (document.getElementById("StimmungRadio").checked) {
+                            type = type + "1";
+                    } else {
+                            type = type + "0";
+                    }
+
+                    if (document.getElementById("BierpreisRadio").checked) {
+                            type = type + "1";
+                    } else {
+                            type = type + "0";
+                    }
+
+                    if (document.getElementById("EintrittRadio").checked) {
+                            type = type + "1";
+                    } else {
+                            type = type + "0";
+                    }
+
+                    if (document.getElementById("KarteGPS").checked) {
+                            type = type + "1";
+                    } else {
+                            type = type + "0";
+                    }
+
+                    if (document.getElementById("KarteAdresse").checked) {
+                            type = type + "1";
+                    } else {
+                            type = type + "0";
+                    }
+
+                    console.log("setCookie('type',"+type+",1')");
+                    setCookie("type", type, 1);
+
+                    console.log("setCookie('radius'," + document.getElementById("RadiusID").value + ",1')");
+                    setCookie("radius", document.getElementById("RadiusID").value)
+
+                    console.log("setCookie('stadt'," + document.getElementById("StadtID").value + ",1')");
+                    setCookie("stadt", document.getElementById("StadtID").value)
+
+                    console.log("setCookie('postleitzahl'," + document.getElementById("PostleitzahlID").value + ",1')");
+                    setCookie("postleitzahl", document.getElementById("PostleitzahlID").value)
+
+                    console.log("setCookie('street'," + document.getElementById("StreetID").value + ",1')");
+                    setCookie("street", document.getElementById("StreetID").value)
+
+
+                    return true;
             }
 
-            if (document.getElementById("BarsID").checked) {
-                type = type + "1";
-                console.log("Bars : 1");
-            } else {
-                type = type + "0";
-                console.log("Bars : 0");
-            }
+            $(document).ready(function () {
 
-            if (document.getElementById("ClubsID").checked) {
-                type = type + "1";
-                console.log("Clubs : 1");
-            } else {
-                type = type + "0";
-                console.log("Clubs : 0");
-            }
+                    console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
 
-            if (document.getElementById("StimmungRadio").checked) {
-                type = type + "1";
-                console.log("StimmungRadio : 1");
-            } else {
-                type = type + "0";
-                console.log("StimmungRadio : 0");
-            }
-            if (document.getElementById("BierpreisRadio").checked) {
-                type = type + "1";
-                console.log("Bierpreis : 1");
-            } else {
-                type = type + "0";
-                console.log("Bierpreis : 0");
-            }
-            if (document.getElementById("EintrittRadio").checked) {
-                type = type + "1";
-                console.log("EintrittRadio : 1");
-            } else {
-                type = type + "0";
-                console.log("EintrittRadio : 0");
-            }
+                    console.log("Document Ready Function()");
 
-            if (document.getElementById("KarteGPS").checked) {
-                type = type + "1";
-                console.log("KarteGPS : 1");
-            } else {
-                type = type + "0";
-                console.log("KarteGPS : 0");
-            }
+                    if (getCookie("type") != null) {
 
-            if (document.getElementById("KarteAdresse").checked) {
-                type = type + "1";
-                console.log("KarteAdresse : 1");
-            } else {
-                type = type + "0";
-                console.log("KarteAdresse : 0");
-            }
+                            if (getCookie("type").toString().charAt(0) == '1') {
+                                    document.getElementById("KneipeID").checked = true;
+                            }
+                            if (getCookie("type").toString().charAt(1) == '1') {
+                                    document.getElementById("BarsID").checked = true;
+                            }
+                            if (getCookie("type").toString().charAt(2) == '1') {
+                                    document.getElementById("ClubsID").checked = true;
+                            }
+                            if (getCookie("type").toString().charAt(3) == '1') {
+                                    document.getElementById("StimmungRadio").checked = true;
+                            }
+                            if (getCookie("type").toString().charAt(4) == '1') {
+                                    document.getElementById("BierpreisRadio").checked = true;
+                            }
+                            if (getCookie("type").toString().charAt(5) == '1') {
+                                    document.getElementById("EintrittRadio").checked = true;
+                            }
+                            if (getCookie("type").toString().charAt(6) == '1') {
+                                    document.getElementById("KarteGPS").checked = true;
+                            }
+                            if (getCookie("type").toString().charAt(6) == '1') {
+                                    document.getElementById("RadiusID").value = true;
+                            }
+                    }
 
-            if (document.getElementById("KarteAdresse").checked) {
-                type = type + "1";
-                console.log("KarteAdresse : 1");
-            } else {
-                type = type + "0";
-                console.log("KarteAdresse : 0");
-            }
+                    if (getCookie("radius") != null) {
+                            document.getElementById("RadiusID").value = getCookie("radius");
+                    }
+                    if (getCookie("stadt") != null) {
+                            document.getElementById("StadtID").value = getCookie("stadt");
+                    }
+                    if (getCookie("postleitzahl") != null) {
+                            document.getElementById("PostleitzahlID").value = getCookie("postleitzahl");
+                    }
+                    if (getCookie("street") != null) {
+                            document.getElementById("StreetID").value = getCookie("street");
+                    }
 
-            console.log("setCookie('type',type,1')");
-            setCookie("type", type, 1);
+                    if(navigator.geolocation)
+                    {
+                            document.getElementById("KarteGPS").disabled="disabled";
+                            document.getElementById("KarteGPS").checked=false;
+                            document.getElementById("KarteAdresse").disabled="disabled";
+                            document.getElementById("KarteAdresse").checked=true;
 
-            console.log("setCookie('radius'," + document.getElementById("RadiusID").value + ",1')");
-            setCookie("radius", document.getElementById("RadiusID").value)
-
-            console.log("setCookie('stadt'," + document.getElementById("StadtID").value + ",1')");
-            setCookie("stadt", document.getElementById("StadtID").value)
-
-            console.log("setCookie('postleitzahl'," + document.getElementById("PostleitzahlID").value + ",1')");
-            setCookie("postleitzahl", document.getElementById("PostleitzahlID").value)
-
-            console.log("setCookie('straße'," + document.getElementById("StraßeID").value + ",1')");
-            setCookie("straße", document.getElementById("StraßeID").value)
-
-
-            return true;
-        }
-
-        $(document).ready(function () {
-
-            console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
-
-            console.log("Document Ready Function()");
-
-            if (getCookie("type") != null) {
-
-                if (getCookie("type").toString().charAt(0) == '1') {
-                    console.log("Kneipe TRUE");
-                    document.getElementById("KneipeID").checked = true;
-                }
-                if (getCookie("type").toString().charAt(1) == '1') {
-                    console.log("Bars TRUE");
-                    document.getElementById("BarsID").checked = true;
-                }
-
-                if (getCookie("type").toString().charAt(2) == '1') {
-                    console.log("Clubs TRUE");
-                    document.getElementById("ClubsID").checked = true;
-                }
-
-                if (getCookie("type").toString().charAt(3) == '1') {
-                    console.log("StimmungsRadio TRUE");
-                    document.getElementById("StimmungRadio").checked = true;
-                }
-
-                if (getCookie("type").toString().charAt(4) == '1') {
-                    console.log("BierpreisRadio TRUE");
-                    document.getElementById("BierpreisRadio").checked = true;
-                }
-
-                if (getCookie("type").toString().charAt(5) == '1') {
-                    console.log("EintrittRadio TRUE");
-                    document.getElementById("EintrittRadio").checked = true;
-                }
-
-                if (getCookie("type").toString().charAt(6) == '1') {
-                    console.log("KarteGPS TRUE");
-                    document.getElementById("KarteGPS").checked = true;
-                }
-
-                if (getCookie("type").toString().charAt(6) == '1') {
-                    console.log("RadiusID TRUE");
-                    document.getElementById("RadiusID").value = true;
-                }
-            }
-
-            if (getCookie("radius") != null) {
-                document.getElementById("RadiusID").value=getCookie("radius");
-            }
-
-            if (getCookie("stadt") != null) {
-                document.getElementById("StadtID").value=getCookie("stadt");
-            }
-
-            if (getCookie("postleitzahl") != null) {
-                document.getElementById("PostleitzahlID").value=getCookie("postleitzahl");
-            }
-
-            if (getCookie("straße") != null) {
-                document.getElementById("StraßeID").value=getCookie("straße");
-            }
-        })
-        ;
+                    }
+            })
+            ;
 
 
     </script>
