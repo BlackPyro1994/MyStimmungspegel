@@ -269,7 +269,7 @@
                             document.getElementById("StreetID").value = getCookie("street");
                     }
 
-                    if (navigator.geolocation) {
+                    if (!navigator.geolocation) {
                             document.getElementById("KarteGPS").disabled = "disabled";
                             document.getElementById("KarteGPS").checked = false;
                             document.getElementById("KarteAdresse").disabled = "disabled";
