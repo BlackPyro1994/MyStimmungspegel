@@ -3,179 +3,63 @@
 {% block title %}{{ block.super }} – Suchoptionen{% endblock %}
 
 {% block content %}
-
-    <div class="row">
-
-        <div class="col-md-3 col-xs-12">
-            <button type="submit" onclick="foo()" class="form-control btn btn-primary">Speichern</button>
+    <div class="col-md-8 col-md-offset-2 col-xs-12">
+      <h2>Suchoptionen</h2><br>
+      <form action="#" class="form-horizontal">
+        <div class="form-group">
+          <div class="col-md-4 col-xs-12">
+            <label for="name">Art der Lokale:</label>
+          </div>
+          <div class="col-md-8 col-xs-12">
+            <label class="checkbox-inline"><input type="checkbox" id="KneipeID" name="optradio">Kneipen</label>
+            <label class="checkbox-inline"><input type="checkbox" id="BarsID" name="optradio">Bars</label>
+            <label class="checkbox-inline"><input type="checkbox" id="ClubsID" name="optradio">Clubs</label>
+          </div>
         </div>
-    </div>
-
-    <hr>
-
-    <div class="row">
-
-        <div class="col-md-12">
-
-            <div class="col-md-4 col-xs-4 ">
-                <form action="#" method="post">
-                    <div class="form-group">
-                        <label for="name">Art der Lokale : </label>
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-md-2 col-md-offset-0 col-xs-4 col-xs-offset-0">
-                <label class="radio-inline"><input type="checkbox" id="KneipeID" name="optradio">Kneipen</label>
-            </div>
-
-            <div class="col-md-2 col-md-offset-1 col-xs-5 col-xs-offset-0">
-                <label class="radio-inline"><input type="checkbox" id="BarsID" name="optradio">Bars</label>
-            </div>
-            <div class="col-md-2 col-md-offset-1 col-xs-4 col-xs-offset-0">
-                <label class="radio-inline"><input type="checkbox" id="ClubsID" name="optradio">Clubs</label>
-            </div>
-
+        <div class="form-group">
+          <div class="col-md-4 col-xs-12">
+            <label for="name">Sortieren nach:</label>
+          </div>
+          <div class="col-md-8 col-xs-12">
+            <label class="radio-inline"><input type="radio" id="StimmungRadio" checked="true" name="optradio">Stimmung</label>
+            <label class="radio-inline"><input type="radio" id="BierpreisRadio" name="optradio">Bierpreis</label>
+            <label class="radio-inline"><input type="radio" id="EintrittRadio" name="optradio">Eintritt</label>
+          </div>
         </div>
-    </div>
-
-    <hr>
-
-    <div class="row">
-        <div class="col-md-12">
-
-            <div class="col-md-4 col-xs-4">
-                <form action="#" method="post">
-                    <div class="form-group">
-                        <label for="name">Sortieren nach : </label>
-                    </div>
-                </form>
-            </div>
-
-
-            <div class=" col-md-3 col-xs-6 col-xs-offset-0">
-                <label class="radio-inline"><input type="radio" id="StimmungRadio" checked="true" name="optradio">Stimmung</label>
-            </div>
-            <div class="col-md-3 col-xs-6 col-xs-offset-0">
-                <label class="radio-inline"><input type="radio" id="BierpreisRadio" name="optradio">Bierpreis</label>
-            </div>
-
-            <div class="col-md-2 col-xs-6 col-xs-offset-0">
-                <label class="radio-inline"><input type="radio" id="EintrittRadio" name="optradio">Eintritt</label>
-            </div>
-
+        <div class="form-group">
+          <div class="col-md-4 col-xs-12">
+            <label for="name">Lokalisierung:</label>
+          </div>
+          <div class="col-md-8 col-xs-12">
+            <label class="radio-inline"><input type="radio" id="KarteGPS" name="optradio1">Geolocation</label>
+            <label class="radio-inline"><input type="radio" id="KarteAdresse" checked="true" name="optradio1">Adresse</label>
+          </div>
         </div>
-    </div>
-    <hr>
-
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-
-            <div class="col-md-4 col-xs-6 col-xs-offset-0">
-                <label for="name">Lokalisierung : </label>
-            </div>
-
-            <div class="col-md-3 col-md-offset-0">
-                <label class="radio-inline"><input type="radio" id="KarteGPS" name="optradio1">Karte auf GPS-Position
-                    zentrieren</label>
-            </div>
-
-            <div class="col-md-3 col-md-offset-2">
-                <label class="radio-inline"><input type="radio" id="KarteAdresse" checked="true" name="optradio1">Karte auf
-                    Adresse zentrieren</label>
-            </div>
+        <div class="form-group">
+          <div class="col-md-4 col-xs-12">
+            <label for="name">Suchradius:</label>
+          </div>
+          <div class="col-md-8 col-xs-12">
+            <select class="form-control" id="RadiusID">
+              <option value="1">1km</option>
+              <option value="2">2km</option>
+              <option value="5">5km</option>
+              <option value="10">10km</option>
+              <option value="15">15km</option>
+              <option value="20">20km</option>
+            </select>
+          </div>
         </div>
-    </div>
-
-    <br>
-    <hr>
-
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-
-            <div class="col-md-4 col-xs-3">
-                <label for="name">Radius : </label>
-            </div>
-
-            <div class="col-md-1 col-md-offset-5 col-xs-4 col-xs-offset-2">
-                <select id="RadiusID" style="width:165px;height: 33px">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                </select>
-            </div>
-
+        <div class="form-group">
+          <div class="col-md-12 col-xs-12">
+            <label for="name">Adresse:</label>
+            <input class="form-control" id="StadtID" type="text" name="name" placeholder="Stadt"><br>
+            <input class="form-control" id="PostleitzahlID" type="text" name="name" placeholder="Postleitzahl"><br>
+            <input class="form-control" id="StreetID" type="text" name="name" placeholder="Straße">
+          </div>
         </div>
-
-    </div>
-
-    <hr>
-
-    <div class="row">
-
-        <div class="col-md-12 col-md-offset-0 col-xs-12">
-
-            <div class="col-md-4">
-                <form action="#" method="post">
-                    <div class="form-group">
-                        <label for="name">Stadt : </label>
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-md-5 col-md-offset-2 col-xs-12">
-                <input class="form-control" id="StadtID" type="text" name="name">
-            </div>
-        </div>
-    </div>
-
-
-    <hr>
-
-    <div class="row">
-        <div class="col-md-12 col-md-offset-0 col-xs-12">
-
-            <div class="col-md-4">
-                <form action="#" method="post">
-                    <div class="form-group">
-                        <label for="name">Postleitzahl : </label>
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-md-5 col-md-offset-2 col-xs-12">
-                <input class="form-control" id="PostleitzahlID" type="text" name="name">
-            </div>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="row">
-
-        <div class="col-md-12 col-md-offset-0 col-xs-12 col-xs-offset-0">
-
-            <div class="col-md-4">
-                <form action="#" method="post">
-                    <div class="form-group">
-                        <label for="name">Straße : </label>
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-md-5 col-md-offset-2 col-xs-12">
-                <input class="form-control" id="StreetID" type="text" name="name">
-            </div>
-        </div>
-    </div>
-
-    <br>
-
-    </div>
-
+        <button type="submit" onclick="foo()" class="form-control btn btn-primary">Speichern</button>
+      </form>
     </div>
 {% endblock %}
 
