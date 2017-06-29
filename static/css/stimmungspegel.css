@@ -8,4 +8,9 @@
     height: 500px;
     width: 100%;
   }
+
+  #location_list {
+    overflow: scroll;
+    height: 485px;
+   }
 }
