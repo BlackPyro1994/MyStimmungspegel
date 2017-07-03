@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+#-*- coding: utf-8 -*-
 """
 Kleines Script, dass erst die Datenbank löscht und sie dann mit Locations
 aus der Datei 'testdata.csv' füllt. Zu jeder Location werden 10 zufällige
