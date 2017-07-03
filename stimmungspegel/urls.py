@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^api/getlocations$', views.get_locations, name='getlocations'),
     url(r'^api/getratings/(?P<location_id>[0-9]+)$', views.get_ratings, name='getratings'),
     url(r'^api/rate/(?P<location_id>[0-9]+)$', views.rate, name='rate'),
+    url(r'^api/search$', views.search, name='perform_search'),
     url(r'^detail/(?P<pk>[0-9]+)$', views.LocationDetail.as_view(), name='detail'),
     url(r'^search$', TemplateView.as_view(template_name='stimmungspegel/search.html'), name='search'),
     url(r'^searchoptions$', TemplateView.as_view(template_name='stimmungspegel/searchoptions.html'), name='searchoptions'),

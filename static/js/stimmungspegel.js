@@ -57,6 +57,48 @@ var getSortFuncFromCookie = function() {
   };
 }
 
+var getRadius = function() {
+  var c = getCookie("radius");
+  if (c) {
+    return parseInt(c);
+  }
+  return 10;
+}
+
+var getSearchOptions = function() {
+  var typecookie = getCookie("type");
+  var opts = {
+    sortFunc: byRating,
+    sortStr: "Beste Stimmung",
+    excludePubs: '',
+    excludeBars: '',
+    excludeClubs: ''
+  };
+  if (typecookie === null) {
+    return opts;
+  }
+  if (typecookie.charAt(0) == '0') {
+    opts.excludePubs = '1';
+  }
+  if (typecookie.charAt(1) == '0') {
+    opts.excludeBars = '1';
+  }
+  if (typecookie.charAt(2) == '0') {
+    opts.excludeClubs = '1';
+  }
+  if (typecookie.charAt(3) == '1') {
+    opts.sortFunc = byRating,
+    opts.sortStr = "Beste Stimmung"
+  } else if (typecookie.charAt(4) == '1') {
+    opts.sortFunc = byBeerPrice;
+    opts.sortStr = "Günstigstes Bier";
+  } else if (typecookie.charAt(5) == '1') {
+    opts.sortFunc = byAdmission;
+    opts.sortStr = "Günstigster Eintritt";
+  }
+  return opts;
+}
+
 var getPosition = function(refresh, callback, errorCallback) {
   console.log("getPosition");
   var lat = getCookie("lat");

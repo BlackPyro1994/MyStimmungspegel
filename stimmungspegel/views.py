@@ -28,13 +28,13 @@ def get_locations(request):
             lat = float(data['lat'])
             lon = float(data['lon'])
             radius = float(data['radius'])
-            ret = []
-            # FIXME: Die performance der folgenden drei Zeilen wird sooo scheiße sein...
-            for location in models.Location.objects.all():
-                if location.distance_to(lat, lon) <= radius:
-                    ret.append(location)
         except (ValueError, KeyError):
             return HttpResponseBadRequest()
+        ret = []
+        # FIXME: Die performance der folgenden drei Zeilen wird sooo scheiße sein...
+        for location in models.Location.objects.all():
+            if location.distance_to(lat, lon) <= radius:
+                ret.append(location)
         ser = serializers.LocationSerializer(ret, many=True)
         return JsonResponse(ser.data, safe=False)
     raise HttpResponseNotAllowed(['GET'])
@@ -69,7 +69,30 @@ def upload_audio(request, location_id):
 
 
 def search(request):
-    pass
+    if request.is_ajax() and request.method == 'GET':
+        data = request.GET
+        try:
+            query = data['q']
+            lat = float(data['lat'])
+            lon = float(data['lon'])
+            radius = float(data['radius'])
+        except (ValueError, KeyError):
+            return HttpResponseBadRequest()
+        locations = models.Location.objects.filter(name__icontains=query)
+        if data.get('excludePubs', False):
+            locations = locations.exclude(type=0)
+        if data.get('excludeBars', False):
+            locations = locations.exclude(type=1)
+        if data.get('excludeClubs', False):
+            locations = locations.exclude(type=2)
+        ret = []
+        # FIXME: Die performance der folgenden drei Zeilen wird sooo scheiße sein...
+        for location in locations:
+            if location.distance_to(lat, lon) <= radius:
+                ret.append(location)
+        ser = serializers.LocationSerializer(ret, many=True)
+        return JsonResponse(ser.data, safe=False)
+    return HttpResponseNotAllowed(['GET'])
 
 
 def add_location(request):
