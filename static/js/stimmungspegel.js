@@ -155,13 +155,13 @@ var StimmungspegelMap = function() {
       var anchor = [0.5, 1.0];
       if (data != null) {
         if (data.type == 0) {
-          iconUrl = "/static/icons/BIER_SMALL.png";
+          iconUrl = "/static/icons/pub.png";
           anchor = [0.5, 0.5];
         } else if (data.type == 1) {
-          iconUrl = "/static/icons/COCKTAIL_SMALL.png";
+          iconUrl = "/static/icons/bar.png";
           anchor = [0.5, 0.5];
         } else if (data.type == 2) {
-          iconUrl = "/static/icons/DISCO_SMALL.png";
+          iconUrl = "/static/icons/club.png";
           anchor = [0.5, 0.5];
         }
       }
