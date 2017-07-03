@@ -13,3 +13,10 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Rating
         fields = ('id', 'location_id', 'date', 'value')
+
+class AudioSnippetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.AudioSnippet
+        fields = ('id', 'location_id', 'date', 'data')
+
+
