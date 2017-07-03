@@ -100,7 +100,6 @@ var getSearchOptions = function() {
 }
 
 var getPosition = function(refresh, callback, errorCallback) {
-  console.log("getPosition");
   var lat = getCookie("lat");
   var lon = getCookie("lon");
   var options = getCookie("type");
@@ -108,9 +107,7 @@ var getPosition = function(refresh, callback, errorCallback) {
     if (options !== null && options.charAt(6) == '1') {
     // Position über Geolocation ermitteln
       if (navigator.geolocation) {
-        console.log("getPosition:geolocation");
         navigator.geolocation.getCurrentPosition(function(position) {
-          console.log("getPosition:geolocation: got Position!");
           lat = position.coords.latitude;
           lon = position.coords.longitude;
           setCookie("lat", lat);

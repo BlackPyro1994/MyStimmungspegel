@@ -75,7 +75,7 @@ class Location(models.Model):
 
     @property
     def last_audio_snippet(self):
-        return self.audiosnippet_set.last()
+        return self.audiosnippet_set.latest('date')
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'pk': self.pk})
