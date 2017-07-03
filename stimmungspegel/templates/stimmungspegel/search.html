@@ -41,7 +41,7 @@
   
   function performSearch() {
     map.removeAllMarkers();
-    map.addMarker(null, pos.lon, pos.lat, null);
+    map.addMarker(null, position.lon, position.lat, null);
     $("#location_list").html('<div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>');
     $.ajax({
       type: 'GET',
