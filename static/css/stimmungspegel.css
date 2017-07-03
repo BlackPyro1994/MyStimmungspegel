@@ -12,5 +12,10 @@
   #location_list {
     overflow: scroll;
     height: 485px;
-   }
+  }
+
+  #ratings_list {
+    overflow: scroll;
+    height: 350px;
+  }
 }

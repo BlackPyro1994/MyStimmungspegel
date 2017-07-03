@@ -2,54 +2,43 @@
 
 {% block content %}
 <div class="row">
-  <div class="col-xs-12 col-md-6"><h3>Hinzufügen</h3></div>
+  <div class="col-md-8 col-md-offset-2 col-xs-12">
+    <h2>Hinzufügen</h2>
+  </div>
 </div>
-<div class="row">
-  <form action="#" method="post">
-    <div class="col-xs-12 col-md-6">
-      <div class="form-group">
-        <label for="name" class="sr-only">Name des Lokals</label>
-        <input class="form-control" type="text" name="name" placeholder="Name des Lokals">
-      </div>
-      <div class="form-group">
-        <label for="type">Art des Lokals</label>
-        <select class="form-control" name="type" id="type">
-          <option value="0">Kneipe</option>
-          <option value="1">Club</option>
-          <option value="2">Bar</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="admission" class="sr-only">Eintritt</label>
-        <input class="form-control" type="text" name="admission" id="admission" placeholder="Eintritt">
-      </div>
-      <div class="form-group">
-        <label for="beer-price" class="sr-only">Bierpreis</label>
-        <input class="form-control" type="text" name="beer-price" id="beer-price" placeholder="Bierpreis">
-      </div>
-    </div>
-    
-    <div class="col-xs-12 col-md-6">
-      <div class="form-group" id="addr">
-        <label for="addr">Adresse:</label>
-        <div class="form-group">
-          <label class="sr-only" for="street"></label>
-          <input class="form-control" type="text" name="street" id="street" placeholder="Straße">
-        </div>
-        <div class="form-group">
-          <label class="sr-only" for="zipcode"></label>
-          <input class="form-control" type="text" name="zipcode" id="zipcode" placeholder="Postleitzahl">
-        </div>
-        <div class="form-group">
-          <label for="city" class="sr-only">Stadt</label>
-          <input class="form-control" type="text" name="city" id="city" placeholder="Stadt">
-        </div>
-      </div>
-    </div>
+<div class="col-md-8 col-md-offset-2 col-xs-12">
+  <form action="{% url 'add' %}" method="post" class="form-horizontal">
     {% csrf_token %}
+    <div class="form-group">
+      <label for="name" class="sr-only">Name des Lokals</label>
+      <input class="form-control" type="text" name="name" placeholder="Name des Lokals">
+    </div>
+    <div class="form-group">
+      <label for="type">Art des Lokals</label>
+      <select class="form-control" name="kind" id="kind">
+        <option value="0">Kneipe</option>
+        <option value="1">Club</option>
+        <option value="2">Bar</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="admission" class="sr-only">Eintritt</label>
+      <input class="form-control" type="text" name="admission" id="admission" placeholder="Eintritt">
+    </div>
+    <div class="form-group">
+      <label for="beer-price" class="sr-only">Bierpreis</label>
+      <input class="form-control" type="text" name="beer_price" id="beer_price" placeholder="Bierpreis">
+    </div>
+    <div class="form-group" id="addr">
+      <label for="addr">Adresse:</label>
+      <label class="sr-only" for="street">Straße</label>
+      <input class="form-control" type="text" name="street" id="street" placeholder="Straße"><br>
+      <label class="sr-only" for="zipcode">Postleitzahl</label>
+      <input class="form-control" type="text" name="zipcode" id="zipcode" placeholder="Postleitzahl"><br>
+      <label for="city" class="sr-only">Stadt</label>
+      <input class="form-control" type="text" name="city" id="city" placeholder="Stadt"><br>
+    </div>
+    <button type="submit" class="form-control btn btn-primary">Hinzufügen</button>
   </form>
-</div>
-<div class="row">
-  <div class="col-xs-12 col-md-6"><button type="submit" class="btn btn-primary">Hinzufügen</button></div>
 </div>
 {% endblock %}

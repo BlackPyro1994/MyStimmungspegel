@@ -2,21 +2,12 @@
 // Cookie-Verwaltung
 
 var getCookie = function(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
+  var results = document.cookie.match ('(^|;) ?' + name + '=([^;]*)(;|$)');
+  return results ? decodeURIComponent(results[2]) : null;
 }
 
-var setCookie = function(c_name, value, exdays) {
-    var exdate = new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-    document.cookie = c_name + "=" + c_value;
+var setCookie = function(c_name, value) {
+  document.cookie = c_name + "=" + encodeURIComponent(value);
 }
 
 
@@ -40,6 +31,83 @@ var byAdmission = function(a, b) {
   return 0;
 }
 
+// Wrapper um "getCookie"
+
+var getSortFuncFromCookie = function() {
+  var typecookie = getCookie("type");
+  if (typecookie != null && typecookie.charAt(3) == '1') {
+    return {
+      sortFunc: byRating,
+      sortStr: "Beste Stimmung"
+    };
+  } else if (typecookie != null && typecookie.charAt(4) == '1') {
+    return {
+      sortFunc: byBeerPrice,
+      sortStr: "Günstigstes Bier"
+    };
+  } else if (typecookie != null && typecookie.charAt(5) == '1') {
+    return {
+      sortFunc: byAdmission,
+      sortStr: "Günstigster Eintritt"
+    };
+  }
+  return {
+    sortFunc: byRating,
+    sortStr: "Beste Stimmung"
+  };
+}
+
+var getPosition = function(refresh, callback, errorCallback) {
+  console.log("getPosition");
+  var lat = getCookie("lat");
+  var lon = getCookie("lon");
+  var options = getCookie("type");
+  if ((refresh || lat === null || lon === null)) {
+    if (options !== null && options.charAt(6) == '1') {
+    // Position über Geolocation ermitteln
+      if (navigator.geolocation) {
+        console.log("getPosition:geolocation");
+        navigator.geolocation.getCurrentPosition(function(position) {
+          console.log("getPosition:geolocation: got Position!");
+          lat = position.coords.latitude;
+          lon = position.coords.longitude;
+          setCookie("lat", lat);
+          setCookie("lon", lon);
+          callback({lat: lat, lon: lon});
+        }, errorCallback);
+      }
+    } else {
+      // Position über angegebene Adresse
+      var citycookie = getCookie("city");
+      var addresscookie = getCookie("address");
+      var zipcookie = getCookie("zipcode");
+      var addr_string = "";
+      if (addresscookie) {
+        addr_string += addresscookie + ", ";
+      }
+      if (zipcookie) {
+        addr_string += zipcookie + " ";
+      }
+      if (citycookie) {
+        addr_string += citycookie;
+      } else {
+        addr_string = "Köln";
+      }
+      var osmGeocoder = GeocoderJS.createGeocoder('openstreetmap');
+      osmGeocoder.geocode(addr_string, function(result) {
+        lat = result[0].latitude;
+        lon = result[0].longitude;
+        setCookie("lat", lat);
+        setCookie("lon", lon);
+        callback({lat: lat, lon: lon});
+      }, errorCallback);
+    }
+  } else {
+    lat = lat ? parseFloat(lat) : 51.163375;
+    lon = lon ? parseFloat(lon) : 10.447683;
+    callback({lat: lat, lon: lon});
+  }
+}
 
 // Map
 
@@ -62,11 +130,9 @@ var StimmungspegelMap = function() {
           projection: "EPSG:4326"
         })
       });
-
       var baseLayer = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
-
       map = new ol.Map({
         target: "map",
         renderer: "canvas",
@@ -76,33 +142,33 @@ var StimmungspegelMap = function() {
           zoom: zoom
         })
       });
-
       map.on("singleclick", function(event) {
         callbackMarkersOnClick(event.pixel);
       });
-
       markerClickCallbacks = Object();
     },
 
     addMarker: function(id, lon, lat, data) {
       var geom = new ol.geom.Point(ol.proj.transform([lon, lat], "EPSG:4326", "EPSG:3857"));
       var feature = new ol.Feature(geom);
-
       var iconUrl = "https://openlayers.org/en/v3.19.1/examples/data/icon.png";
+      var anchor = [0.5, 1.0];
       if (data != null) {
-        if (data.kind == 0) {
+        if (data.type == 0) {
           iconUrl = "/static/icons/BIER_SMALL.png";
-        } else if (data.kind == 1) {
+          anchor = [0.5, 0.5];
+        } else if (data.type == 1) {
           iconUrl = "/static/icons/COCKTAIL_SMALL.png";
-        } else if (data.kind == 2) {
+          anchor = [0.5, 0.5];
+        } else if (data.type == 2) {
           iconUrl = "/static/icons/DISCO_SMALL.png";
+          anchor = [0.5, 0.5];
         }
       }
-
       feature.setStyle([
         new ol.style.Style({
             image: new ol.style.Icon(({
-            anchor: [0.5, 0.5],
+            anchor: anchor,
             anchorXUnits: "fraction",
             anchorYUnits: "fraction",
             opacity: 1,
@@ -110,11 +176,9 @@ var StimmungspegelMap = function() {
           }))
         })
       ]);
-
       if (id != null) {
         feature.setId(id);
       }
-
       map.getLayers().item(1).getSource().addFeature(feature);
     },
 

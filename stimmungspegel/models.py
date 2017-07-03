@@ -1,15 +1,16 @@
 from django.db import models
+from django.urls import reverse
 import math
 import geocoder
 
 
 class Location(models.Model):
-    kind_choices = (('Kneipe', 0), ('Bar', 1), ('Club', 2))
+    type_choices = (('Kneipe', 0), ('Bar', 1), ('Club', 2))
 
     name = models.CharField(max_length=100)
-    kind = models.IntegerField(choices=kind_choices)
-    beer_price = models.FloatField()
-    admission = models.FloatField()
+    type = models.IntegerField(choices=type_choices)
+    beer_price = models.CharField(max_length=20)
+    admission = models.CharField(max_length=20)
     address = models.CharField(max_length=255, blank=True, null=True)
     zipcode = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
@@ -56,8 +57,8 @@ class Location(models.Model):
         @param lon  Längengrad (float)
         @return Distanz in km (float)
         """
-        l = (self.position_lat + lat) / 2 * 0.01745
-        dx = 111.3 * math.cos(l) * (self.position_lon - lon)
+        lat_rad = (self.position_lat + lat) / 2 * 0.01745
+        dx = 111.3 * math.cos(lat_rad) * (self.position_lon - lon)
         dy = 111.3 * (self.position_lat - lat)
         return math.sqrt(dx**2 + dy**2)
 
@@ -71,6 +72,13 @@ class Location(models.Model):
         if self.rating_set.count() > 0:
             return sum([r.value for r in self.rating_set.all()]) / self.rating_set.count()
         return 0
+
+    @property
+    def last_audio_snippet(self):
+        return self.audiosnippet_set.last()
+
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name

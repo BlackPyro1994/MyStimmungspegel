@@ -1,6 +1,6 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView
-from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponse
+from django.http import *
 from stimmungspegel import models
 from stimmungspegel import serializers
 
@@ -13,18 +13,18 @@ class LocationDetail(DetailView):
 
 def get_locations(request):
     """
-    Gibt eine Liste von 'Location'-Objeckten zurück. Aufruf über Ajax (POST)
+    Gibt eine Liste von 'Location'-Objeckten zurück, Aufruf über AJAX.
 
     Die Auswahl kann über Parameter eingegrenzt werden:
-        * Längengrad, Breitengrad und Suchradius ('lat', 'lon' und 'radius')
-        * Maximale Anzahl der zurückgegeben Objekte ('count')
+        * Längengrad, Breitengrad und Suchradius ('lon', 'lat' und 'radius')
 
     @return Array von Locations als JSON,
-            HTTP405 (Method not allowed) bei falschem Aufruf
+            HTTP400 (Bad request) wenn 'lon', 'lat' und 'radius' nicht vorhanden oder fehlerhaft
+            HTTP405 (Method not allowed) bei Aufruf mit falscher HTTP Methode
     """
-    if request.is_ajax() and request.method == 'POST':
-        data = request.POST
-        if all(key in data for key in ('lat', 'lon', 'radius')):
+    if request.is_ajax() and request.method == 'GET':
+        data = request.GET
+        try:
             lat = float(data['lat'])
             lon = float(data['lon'])
             radius = float(data['radius'])
@@ -33,13 +33,11 @@ def get_locations(request):
             for location in models.Location.objects.all():
                 if location.distance_to(lat, lon) <= radius:
                     ret.append(location)
-        else:
-            ret = models.Location.objects.all()
-        if 'count' in data:
-            ret = ret[:int(data['count'])]
+        except (ValueError, KeyError):
+            return HttpResponseBadRequest()
         ser = serializers.LocationSerializer(ret, many=True)
         return JsonResponse(ser.data, safe=False)
-    raise HttpResponseNotAllowed(['POST'])
+    raise HttpResponseNotAllowed(['GET'])
 
 
 def rate(request, location_id):
@@ -54,7 +52,7 @@ def rate(request, location_id):
 
 
 def get_ratings(request, location_id):
-    ratings = models.Rating.objects.filter(location_id=location_id).order_by('-date')
+    ratings = models.Rating.objects.filter(location_id=location_id).order_by('-date')[:20]
     ser = serializers.RatingSerializer(ratings, many=True)
     return JsonResponse(ser.data, safe=False)
 
@@ -75,4 +73,19 @@ def search(request):
 
 
 def add_location(request):
-    pass
+    if request.method == 'POST':
+        try:
+            loc = models.Location()
+            loc.name = request.POST['name']
+            loc.type = int(request.POST['kind'])
+            loc.admission = request.POST['admission']
+            loc.beer_price = request.POST['beer_price']
+            loc.address = request.POST['street']
+            loc.zipcode = request.POST['zipcode']
+            loc.city = request.POST['city']
+            loc.save()
+            return HttpResponseRedirect(loc.get_absolute_url())
+        except KeyError:
+            return HttpResponseBadRequest()
+    else:
+        return render(request, "stimmungspegel/add.html")

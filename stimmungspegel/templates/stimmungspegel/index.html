@@ -20,64 +20,32 @@
 {% block jquery %}
 <script>
   $(document).ready(function () {
-    var latcookie = getCookie("lat");
-    var loncookie = getCookie("lon");
     var radius = getCookie("radius");
-    var typecookie = getCookie("type");
-    var sortFunc = byRating;
-    var sortStr = "Beste Stimmung";
-    
-    if (typecookie != null && typecookie.charAt(3) == '1') {
-      sortFunc = byRating;
-      sortStr = "Beste Stimmung"; 
-    } else if (typecookie != null && typecookie.charAt(4) == '1') {
-      sortFunc = byBeerPrice;
-      sortStr = "Günstigstes Bier";
-    } else if (typecookie != null && typecookie.charAt(5) == '1') {
-      sortFunc = byAdmission;
-      sortStr = "Günstigster Eintritt";
-    }
-  
-    if (latcookie == null || loncookie == null) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          var lat = position.coords.latitude;
-          var lon = position.coords.longitude;
-          setCookie("lat", lat);
-          setCookie("lon", lon);
-          getLocations(lat, lon, radius);
-        });
-      }
-    } else {
-      getLocations(Number(latcookie), Number(loncookie), radius);
+    var options = getSortFuncFromCookie();
+    if (radius == null) {
+      radius = 10
     }
     
-    function getLocations(lat, lon, radius) {
+    getPosition(true, function(pos) {
       map = StimmungspegelMap();
-      map.createMap(lon, lat, 12);
-      map.addMarker(null, lon, lat, null);
+      map.createMap(pos.lon, pos.lat, 12);
+      map.addMarker(null, pos.lon, pos.lat, null);
       
-      if (radius == null) {
-        radius = 10.0
-      }
       $.ajax({
-        type: "POST",
+        type: "GET",
         url: "{% url 'getlocations' %}",
         dataType: "json",
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader('X-CSRFToken', "{{csrf_token}}");
-        },
         data: {
-          lat: lat,
-          lon: lon,
+          lat: pos.lat,
+          lon: pos.lon,
           radius: radius
         }
       })
       .done(function(locations) {
-        $("#sorting-radius").html(sortStr + " im Umkreis von " + radius + "km:");
+        $("#sorting-radius").html(options.sortStr + " im Umkreis von " + radius + "km:");
         $("#location_list").empty();
         
-        locations.sort(sortFunc);
+        locations.sort(options.sortFunc);
 
         locations.forEach(function(location, index, array) {
           var rating_html = '';
@@ -91,8 +59,8 @@
             '<div class="location well well-sm"' +
             '<p><b><a href="/detail/' + location.id + '">' + location.name + '</a></b></p>' +
             '<p>Stimmung: ' + rating_html + '</p>' +
-            '<p>Bierpreis: ' + location.beer_price + '€</p>' +
-            '<p>Eintritt: ' + location.admission + '€</p>' +
+            '<p>Bierpreis: ' + location.beer_price + '</p>' +
+            '<p>Eintritt: ' + location.admission + '</p>' +
             '</div>'
           );
           map.addMarker(location.id, location.position_lon, location.position_lat, location);
@@ -107,7 +75,7 @@
         $("#location_list").empty();
         $("#location_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
       });
-    }
+    }, function(error) { alert(error.message); });
   });
 </script>
 {% endblock %}
