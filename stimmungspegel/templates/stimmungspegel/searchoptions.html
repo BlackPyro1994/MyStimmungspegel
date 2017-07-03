@@ -159,9 +159,8 @@
       }
       if (typecookie.toString().charAt(6) == '1') {
         document.getElementById("KarteGPS").checked = true;
-      }
-      if (typecookie.toString().charAt(6) == '1') {
-        document.getElementById("RadiusID").value = true;
+      } else {
+        document.getElementById("KarteAdresse").checked = true;
       }
     }
 
@@ -181,12 +180,12 @@
       document.getElementById("StreetID").value = getCookie("address");
     }
 
-    // if (!navigator.geolocation) {
-    //   document.getElementById("KarteGPS").disabled = "disabled";
-    //   document.getElementById("KarteGPS").checked = false;
-    //   document.getElementById("KarteAdresse").disabled = "disabled";
-    //   document.getElementById("KarteAdresse").checked = true;
-    // }
+    if (!navigator.geolocation) {
+      document.getElementById("KarteGPS").disabled = "disabled";
+      document.getElementById("KarteGPS").checked = false;
+      document.getElementById("KarteAdresse").disabled = "disabled";
+      document.getElementById("KarteAdresse").checked = true;
+    }
   });
 </script>
 {% endblock jquery %}
