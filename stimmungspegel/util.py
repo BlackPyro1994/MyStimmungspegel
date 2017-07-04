@@ -4,6 +4,7 @@ MIN_LAT = math.radians(-90.0)
 MAX_LAT = math.radians(90.0)
 MIN_LON = math.radians(-180.0)
 MAX_LON = math.radians(180.0)
+EARTH_RADIUS = 6371.01
 
 
 def bounding_coordinates(lat, lon, distance):
@@ -14,8 +15,8 @@ def bounding_coordinates(lat, lon, distance):
     siehe: http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
     """
     if distance <= 0:
-        raise ValueError('radius must be greater than zero')
-    dist_radians = distance / 6371.0
+        raise ValueError('distance must be greater than zero')
+    dist_radians = distance / EARTH_RADIUS
     lat_radians = math.radians(lat)
     lon_radians = math.radians(lon)
 
