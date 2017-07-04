@@ -15,7 +15,7 @@ def bounding_coordinates(lat, lon, distance):
     """
     if distance <= 0:
         raise ValueError('radius must be greater than zero')
-    dist_radians = distance / 6371.0
+    dist_radians = distance / 6371.01
     lat_radians = math.radians(lat)
     lon_radians = math.radians(lon)
 

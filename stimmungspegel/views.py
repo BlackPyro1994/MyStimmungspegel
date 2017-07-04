@@ -36,8 +36,8 @@ def get_locations(request):
         minLat, minLon, maxLat, maxLon = bounding_coordinates(lat, lon, radius)
         # Auswahl mit Vergleichskoordinaten eingrenzen
         locations = models.Location.objects
-        locations = locations.exclude(position_lat__lte=minLat, position_lon__lte=minLon)
-        locations = locations.exclude(position_lat__gte=maxLat, position_lon__gte=maxLon)
+        locations = locations.filter(position_lat__gte=minLat, position_lon__gte=minLon)
+        locations = locations.filter(position_lat__lte=maxLat, position_lon__lte=maxLon)
 
         # Auswahl nach Art des Lokals weiter eingrenzen
         if data.get('excludePubs', False):
@@ -90,7 +90,17 @@ def search(request):
             radius = float(data['radius'])
         except (ValueError, KeyError):
             return HttpResponseBadRequest()
+
+        # Mit dem Suchbegriff nach Namen filtern
         locations = models.Location.objects.filter(name__icontains=query)
+
+        # Vergleichskoordinaten berechnen
+        minLat, minLon, maxLat, maxLon = bounding_coordinates(lat, lon, radius)
+        # Auswahl mit Vergleichskoordinaten eingrenzen
+        locations = locations.filter(position_lat__gte=minLat, position_lon__gte=minLon)
+        locations = locations.filter(position_lat__lte=maxLat, position_lon__lte=maxLon)
+
+        # Auswahl nach Art des Lokals weiter eingrenzen
         if data.get('excludePubs', False):
             locations = locations.exclude(type=0)
         if data.get('excludeBars', False):
@@ -98,10 +108,7 @@ def search(request):
         if data.get('excludeClubs', False):
             locations = locations.exclude(type=2)
         ret = []
-        # FIXME: Die performance der folgenden drei Zeilen wird sooo scheiße sein...
-        for location in locations:
-            if location.distance_to(lat, lon) <= radius:
-                ret.append(location)
+
         ser = serializers.LocationSerializer(ret, many=True)
         return JsonResponse(ser.data, safe=False)
     return HttpResponseNotAllowed(['GET'])

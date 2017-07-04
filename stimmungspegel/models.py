@@ -17,8 +17,8 @@ class Location(models.Model):
     address = models.CharField(max_length=255, blank=True, null=True)
     zipcode = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
-    position_lat = models.FloatField(blank=True, null=True)
-    position_lon = models.FloatField(blank=True, null=True)
+    position_lat = models.FloatField(blank=True)
+    position_lon = models.FloatField(blank=True)
 
     def set_position(self, lat, lon):
         self.position_lat = lat
@@ -32,15 +32,15 @@ class Location(models.Model):
         self._calc_position()
 
     def _calc_address(self):
-        pos = geocoder.osm([self.lat, self.lon])
+        pos = geocoder.osm([self.position_lat, self.position_lon])
         self.address = pos.address
         self.zipcode = pos.zipcode
         self.city = pos.city
 
     def _calc_position(self):
         pos = geocoder.osm('{}, {} {}'.format(self.address, self.zipcode, self.city))
-        self.lat = pos.lat
-        self.lon = pos.lng
+        self.position_lat = pos.lat
+        self.position_lon = pos.lng
 
     def save(self, *args, **kwargs):
         # Vor dem speichern in der DB:
