@@ -7,6 +7,12 @@ MAX_LON = math.radians(180.0)
 
 
 def bounding_coordinates(lat, lon, distance):
+    """
+    Berechnung zweier Refernezpunkte die ein Rechteck ergeben,
+    dass ungefähr einem Kreis mit Suchradius entspricht.
+
+    siehe: http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
+    """
     if distance <= 0:
         raise ValueError('radius must be greater than zero')
     dist_radians = distance / 6371.0
