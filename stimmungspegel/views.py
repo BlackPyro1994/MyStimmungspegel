@@ -30,9 +30,16 @@ def get_locations(request):
             radius = float(data['radius'])
         except (ValueError, KeyError):
             return HttpResponseBadRequest()
+        locations = models.Location.objects.all()
+        if data.get('excludePubs', False):
+            locations = locations.exclude(type=0)
+        if data.get('excludeBars', False):
+            locations = locations.exclude(type=1)
+        if data.get('excludeClubs', False):
+            locations = locations.exclude(type=2)
         ret = []
         # FIXME: Die performance der folgenden drei Zeilen wird sooo scheiße sein...
-        for location in models.Location.objects.all():
+        for location in locations:
             if location.distance_to(lat, lon) <= radius:
                 ret.append(location)
         ser = serializers.LocationSerializer(ret, many=True)

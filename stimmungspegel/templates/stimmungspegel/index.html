@@ -20,8 +20,8 @@
 {% block jquery %}
 <script>
   $(document).ready(function () {
-    var radius = getCookie("radius");
-    var options = getSortFuncFromCookie();
+    var radius = getRadius();
+    var options = getSearchOptions();
     if (radius == null) {
       radius = 10
     }
@@ -38,7 +38,10 @@
         data: {
           lat: pos.lat,
           lon: pos.lon,
-          radius: radius
+          radius: radius,
+          excludePubs: options.excludePubs,
+          excludeBars: options.excludeBars,
+          excludeClubs: options.excludeClubs
         }
       })
       .done(function(locations) {
