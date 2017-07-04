@@ -190,7 +190,7 @@ var StimmungspegelMap = function() {
     addMarker: function(id, lon, lat, data) {
       var geom = new ol.geom.Point(ol.proj.transform([lon, lat], "EPSG:4326", "EPSG:3857"));
       var feature = new ol.Feature(geom);
-      var iconUrl = "https://openlayers.org/en/v3.19.1/examples/data/icon.png";
+      var iconUrl = "/static/icons/pos.png";
       var anchor = [0.5, 1.0];
       if (data != null) {
         if (data.type == 0) {
