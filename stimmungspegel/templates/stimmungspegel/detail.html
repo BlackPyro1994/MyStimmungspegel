@@ -24,15 +24,10 @@
                 <p><b>Eintritt:</b> {{ location.admission }}</p>
                 <p><b>Bierpreis:</b> {{ location.beer_price }}</p>
             </div>
-
-
-            {% if location.last_audio_snippet %}
-                <audio controls>
-                    <source id="audio-source" src="{{ location.last_audio_snippet.url }}" type="audio/wav">
-                </audio>
-            {% endif %}
-
-
+            
+            <audio id="audioPlayer" controls>
+                <source id="audio-source" src="{{ location.last_audio_snippet.data.url }}" type="audio/wav">
+            </audio>
 
             <br>
             <button id="start-recording" onclick="record()">Start</button>
@@ -56,8 +51,8 @@
     <script src="https://cdn.webrtc-experiment.com/MediaStreamRecorder.js"></script>
 
     <script>
-
-
+        console.log("ursprünlgiche url: {{location.last_audio_snippet.data.url}}");
+        
          function updateRatings()
          {
               $("#ratings_list").empty();
@@ -163,32 +158,28 @@
 
                    mediaRecorder.ondataavailable = function (blob)
                    {
-                        console.log("hier");
-
                         mediaRecorder.stop();
-                        document.getElementById('test').innerHTML = '<a href="' + blobUrl + '">' + blobUrl + '</a>';
-
+                        
+                        var f = new File([blob], 'snippet.wav', {type: 'audio/wav'});
                         var formdata = new FormData();
-                        formdata.append("snippet", blob, "snippet.wav");
-
-
+                        formdata.set("snippet", f);
                         $.ajax({
                              type: "POST",
                              url: "{% url 'upload_audio' location_id=location.pk %}",
-                             dataType: "json",
                              data: formdata,
-                             beforeSend: function (xhr)
-                             {
+                             contentType: false,
+                             processData: false,
+                             beforeSend: function (xhr) {
                                   xhr.setRequestHeader('X-CSRFToken', "{{csrf_token}}");
                              },
-                        }).done(function (snippets)
-                        {
-                             document.getElementById('audio-source').scr = snippet.url;
+                        }).done(function (snippet) {
+                            $("#audioPlayer").replaceWith(
+                              '<audio src="' + snippet.url + '" id="audioPlayer" controls>'  
+                            );
                         });
-
-                        mediaRecorder.start(10000);
-
                    }
+                   
+                   mediaRecorder.start(10000);
 
               }
 

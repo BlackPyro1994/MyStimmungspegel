@@ -77,6 +77,7 @@ class Location(models.Model):
 
     @property
     def last_audio_snippet(self):
+        print(self.audiosnippet_set.latest('date'))
         return self.audiosnippet_set.latest('date')
 
     def get_absolute_url(self):
@@ -95,17 +96,16 @@ class Rating(models.Model):
         return '{} - {} - {}'.format(self.date, self.location.name, self.value)
 
 
-def path_and_rename(path):
-    def wrapper(instance, filename):
-        ext = os.path.splitext(filename)[-1]
-        filename = '{}.{}'.format(uuid.uuid4().hex, ext)
-        return os.path.join(path, filename)
+def path_and_rename(instance, filename):
+    ext = os.path.splitext(filename)[-1]
+    filename = '{}.{}'.format(uuid.uuid4().hex, ext)
+    return os.path.join('audiosnippets', filename)
 
 
 class AudioSnippet(models.Model):
     location = models.ForeignKey(Location)
     date = models.DateTimeField(auto_now_add=True)
-    data = models.FileField(upload_to=path_and_rename('audiosnippets/'))
+    data = models.FileField(upload_to=path_and_rename)
 
     def __str__(self):
         return '{} {}'.format(self.date, self.location.name)

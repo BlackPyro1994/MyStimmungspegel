@@ -25,7 +25,7 @@ SECRET_KEY = 'isyxca)$fa40)3cu!^omcufv#xy#2q809c_yd2$)i3*-y*onpc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['139.6.102.46']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -124,7 +124,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
-STATIC_ROOT = '/webapps/stimmungspegel/static'
+#STATIC_ROOT = '/webapps/stimmungspegel/static'
 
-MEDIA_ROOT = '/webapps/stimmungspegel/media'
+#MEDIA_ROOT = '/webapps/stimmungspegel/media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
