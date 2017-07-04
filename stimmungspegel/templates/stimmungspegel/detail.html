@@ -1,113 +1,204 @@
 {% extends "stimmungspegel/base.html" %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md12 col-xs-12"><h1>{{ location.name }}</h1></div>
-</div>
-
-<div class="row">
-  <div class="col-xs-12 col-md-6">
-    <div class="map" id="map"></div>
-  </div>
-
-  <div class="col-xs-12 col-md-6">
-    <div class="text-center">
-      <small>Stimmung:</small>
-      <div class="center-block" id="rating"></div>
-    </div><br>
-    <div class="well well-sm">
-      <p>
-        <b>Art:</b>
-        {% if location.type == 0 %}Kneipe{% elif location.type == 1%}Bar{% else %}Club{% endif %}
-      </p>
-      <p><b>Eintritt:</b> {{location.admission}}</p>
-      <p><b>Bierpreis:</b> {{location.beer_price}}</p>
+    <div class="row">
+        <div class="col-md12 col-xs-12"><h1>{{ location.name }}</h1></div>
     </div>
-    <div>
-      <p><b>Letzte Bewertungen:</b></p>
-        <div class="pre-scrollable" id="ratings_list">
-          <div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div class="map" id="map"></div>
+        </div>
+
+        <div class="col-xs-12 col-md-6">
+            <div class="text-center">
+                <small>Stimmung:</small>
+                <div class="center-block" id="rating"></div>
+            </div>
+            <br>
+            <div class="well well-sm">
+                <p>
+                    <b>Art:</b>
+                    {% if location.type == 0 %}Kneipe{% elif location.type == 1 %}Bar{% else %}Club{% endif %}
+                </p>
+                <p><b>Eintritt:</b> {{ location.admission }}</p>
+                <p><b>Bierpreis:</b> {{ location.beer_price }}</p>
+            </div>
+
+
+            {% if location.last_audio_snippet %}
+                <audio controls>
+                    <source id="audio-source" src="{{ location.last_audio_snippet.url }}" type="audio/wav">
+                </audio>
+            {% endif %}
+
+
+
+            <br>
+            <button id="start-recording" onclick="record()">Start</button>
+            <br>
+
+
+            <div>
+                <p><b>Letzte Bewertungen:</b></p>
+                <div class="pre-scrollable" id="ratings_list">
+                    <div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
-</div>
 {% endblock content %}
 
-{% block jquery %}
-<script>
-  function updateRatings() {
-      $("#ratings_list").empty();
-      $("#ratings_list").html(
-        '<div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>'
-      );
-      $.ajax({
-          type: "GET",
-          url: "{% url 'getratings' location_id=location.pk %}",
-          dataType: "json"
-      })
-      .done(function (ratings) {
-        $("#ratings_list").empty();
-        ratings.forEach(function (rating, index, array) {
-          var rating_html = '';
-          for (var i = 0; i < rating.value.toFixed(); i++) {
-              rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
-          }
-          for (var i = 0; i < 5 - rating.value.toFixed(); i++) {
-              rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>";
-          }
-          var date = new Date(rating.date);
-          $("#ratings_list").append (
-              '<div class="ratings well well-sm">' + 
-              '<p class="text-center">' + rating_html + '</p>' +
-              '<p class="text-center"><small>' + date.toLocaleString() + '</small></p>' +
-              '</div>'
-          );
-        });
-      })
-      .fail(function (xhr, status, errorThrown) {
-        console.log("Error: " + errorThrown);
-        console.log("Status: " + status);
-        $("#ratings_list").empty();
-        $("#ratings_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
-      });
-    }
 
-  $(document).ready(function () {
-    map = StimmungspegelMap();
-    map.createMap({{ location.position_lon }}, {{ location.position_lat }}, 17);
-    map.addMarker(null, {{ location.position_lon }}, {{ location.position_lat }}, {type: {{location.type}}});
-    getPosition(true, function(pos) {
-      map.addMarker(null, pos.lon, pos.lat, null);
-    });
-    $("#rating").rateYo({
-      rating: Math.round({{location.rating}}),
-      starWidth: "45px",
-      spacing: "10px",
-      fullStar: true,
-      maxValue: 5.0,
-      precision: 1,
-      onSet: function(rating, instance) {
-        $.ajax({
-          type: "POST",
-          url: "{% url 'rate' location_id=location.pk %}",
-          dataType: "JSON",
-          beforeSend: function(xhr) {
-            xhr.setRequestHeader('X-CSRFToken', "{{csrf_token}}");
-          },
-          data: {
-            rating: rating
-          }
-        }).done(function(data) {
-          updateRatings();
-        })
-        .fail(function (xhr, status, errorThrown) {
-          console.log("Error: " + errorThrown);
-          console.log("Status: " + status);
-        });
-      },
-    });
-    updateRatings();
-  });
-</script>
+
+{% block jquery %}
+
+    <script src="https://cdn.webrtc-experiment.com/MediaStreamRecorder.js"></script>
+
+    <script>
+
+
+         function updateRatings()
+         {
+              $("#ratings_list").empty();
+              $("#ratings_list").html(
+                  '<div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>'
+              );
+              $.ajax({
+                   type: "GET",
+                   url: "{% url 'getratings' location_id=location.pk %}",
+                   dataType: "json"
+              })
+                  .done(function (ratings)
+                  {
+                       $("#ratings_list").empty();
+                       ratings.forEach(function (rating, index, array)
+                       {
+                            var rating_html = '';
+                            for (var i = 0; i < rating.value.toFixed(); i++)
+                            {
+                                 rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
+                            }
+                            for (var i = 0; i < 5 - rating.value.toFixed(); i++)
+                            {
+                                 rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>";
+                            }
+                            var date = new Date(rating.date);
+                            $("#ratings_list").append(
+                                '<div class="ratings well well-sm">' +
+                                '<p class="text-center">' + rating_html + '</p>' +
+                                '<p class="text-center"><small>' + date.toLocaleString() + '</small></p>' +
+                                '</div>'
+                            );
+                       });
+                  })
+                  .fail(function (xhr, status, errorThrown)
+                  {
+                       console.log("Error: " + errorThrown);
+                       console.log("Status: " + status);
+                       $("#ratings_list").empty();
+                       $("#ratings_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
+                  });
+         }
+
+         $(document).ready(function ()
+         {
+              map = StimmungspegelMap();
+              map.createMap({{ location.position_lon }}, {{ location.position_lat }}, 17);
+              map.addMarker(null, {{ location.position_lon }}, {{ location.position_lat }}, {type: {{location.type}}});
+              getPosition(true, function (pos)
+              {
+                   map.addMarker(null, pos.lon, pos.lat, null);
+              });
+              $("#rating").rateYo({
+                   rating: Math.round({{location.rating}}),
+                   starWidth: "45px",
+                   spacing: "10px",
+                   fullStar: true,
+                   maxValue: 5.0,
+                   precision: 1,
+                   onSet: function (rating, instance)
+                   {
+                        $.ajax({
+                             type: "POST",
+                             url: "{% url 'rate' location_id=location.pk %}",
+                             dataType: "JSON",
+                             beforeSend: function (xhr)
+                             {
+                                  xhr.setRequestHeader('X-CSRFToken', "{{csrf_token}}");
+                             },
+                             data: {
+                                  rating: rating
+                             }
+                        }).done(function (data)
+                        {
+                             updateRatings();
+                        })
+                            .fail(function (xhr, status, errorThrown)
+                            {
+                                 console.log("Error: " + errorThrown);
+                                 console.log("Status: " + status);
+                            });
+                   },
+              });
+              updateRatings();
+         });
+
+         function record()
+         {
+
+              var mediaConstraints = {
+                   audio: true,
+                   video: false
+              };
+
+              navigator.getUserMedia(mediaConstraints, onSuccess, onError);
+
+              function onSuccess(stream)
+              {
+                   console.log("onSuccess Aufruf");
+
+                   var mediaRecorder = new MediaStreamRecorder(stream);
+                   mediaRecorder.mimeType = 'audio/wav';
+
+                   mediaRecorder.ondataavailable = function (blob)
+                   {
+                        console.log("hier");
+
+                        mediaRecorder.stop();
+                        document.getElementById('test').innerHTML = '<a href="' + blobUrl + '">' + blobUrl + '</a>';
+
+                        var formdata = new FormData();
+                        formdata.append("snippet", blob, "snippet.wav");
+
+
+                        $.ajax({
+                             type: "POST",
+                             url: "{% url 'upload_audio' location_id=location.pk %}",
+                             dataType: "json",
+                             data: formdata,
+                             beforeSend: function (xhr)
+                             {
+                                  xhr.setRequestHeader('X-CSRFToken', "{{csrf_token}}");
+                             },
+                        }).done(function (snippets)
+                        {
+                             document.getElementById('audio-source').scr = snippet.url;
+                        });
+
+                        mediaRecorder.start(10000);
+
+                   }
+
+              }
+
+              function onError(e)
+              {
+                   console.error('media error', e);
+              }
+         }
+
+
+    </script>
 {% endblock %}
 
