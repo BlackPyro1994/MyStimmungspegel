@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 import math
+import uuid
+import os.path
 import geocoder
 
 
@@ -93,10 +95,17 @@ class Rating(models.Model):
         return '{} - {} - {}'.format(self.date, self.location.name, self.value)
 
 
+def path_and_rename(path):
+    def wrapper(instance, filename):
+        ext = os.path.splitext(filename)[-1]
+        filename = '{}.{}'.format(uuid.uuid4().hex, ext)
+        return os.path.join(path, filename)
+
+
 class AudioSnippet(models.Model):
     location = models.ForeignKey(Location)
     date = models.DateTimeField(auto_now_add=True)
-    data = models.FileField(upload_to='audiosnippets/')
+    data = models.FileField(upload_to=path_and_rename('audiosnippets/'))
 
     def __str__(self):
         return '{} {}'.format(self.date, self.location.name)

@@ -62,9 +62,9 @@ def upload_audio(request, location_id):
         location = get_object_or_404(models.Location, id=location_id)
         snippet = models.AudioSnippet()
         snippet.location = location
-        snippet.data = request.FILE['snippet']
+        snippet.data = request.FILES['snippet']
         snippet.save()
-        return HttpResponse(status=200)
+        return JsonResponse({'url': snippet.data.url})
     return HttpResponseNotAllowed(['POST'])
 
 
