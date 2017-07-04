@@ -3,6 +3,7 @@ from django.views.generic import DetailView
 from django.http import *
 from stimmungspegel import models
 from stimmungspegel import serializers
+from stimmungspegel.util import bounding_coordinates
 
 
 class LocationDetail(DetailView):
@@ -30,21 +31,25 @@ def get_locations(request):
             radius = float(data['radius'])
         except (ValueError, KeyError):
             return HttpResponseBadRequest()
-        locations = models.Location.objects.all()
+
+        # Vergleichskoordinaten berechnen
+        minLat, minLon, maxLat, maxLon = bounding_coordinates(lat, lon, radius)
+        # Auswahl mit Vergleichskoordinaten eingrenzen
+        locations = models.Location.objects
+        locations = locations.exclude(position_lat__lte=minLat, position_lon__lte=minLon)
+        locations = locations.exclude(position_lat__gte=maxLat, position_lon__gte=maxLon)
+
+        # Auswahl nach Art des Lokals weiter eingrenzen
         if data.get('excludePubs', False):
             locations = locations.exclude(type=0)
         if data.get('excludeBars', False):
             locations = locations.exclude(type=1)
         if data.get('excludeClubs', False):
             locations = locations.exclude(type=2)
-        ret = []
-        # FIXME: Die performance der folgenden drei Zeilen wird sooo scheiße sein...
-        for location in locations:
-            if location.distance_to(lat, lon) <= radius:
-                ret.append(location)
-        ser = serializers.LocationSerializer(ret, many=True)
+
+        ser = serializers.LocationSerializer(locations, many=True)
         return JsonResponse(ser.data, safe=False)
-    raise HttpResponseNotAllowed(['GET'])
+    return HttpResponseNotAllowed(['GET'])
 
 
 def rate(request, location_id):

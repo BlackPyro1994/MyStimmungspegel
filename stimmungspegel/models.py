@@ -1,9 +1,10 @@
-from django.db import models
-from django.urls import reverse
 import math
 import uuid
 import os.path
 import geocoder
+
+from django.db import models
+from django.urls import reverse
 
 
 class Location(models.Model):
@@ -31,15 +32,15 @@ class Location(models.Model):
         self._calc_position()
 
     def _calc_address(self):
-        pos = geocoder.osm([self.position_lat, self.position_lon])
+        pos = geocoder.osm([self.lat, self.lon])
         self.address = pos.address
         self.zipcode = pos.zipcode
         self.city = pos.city
 
     def _calc_position(self):
         pos = geocoder.osm('{}, {} {}'.format(self.address, self.zipcode, self.city))
-        self.position_lat = pos.lat
-        self.position_lon = pos.lng
+        self.lat = pos.lat
+        self.lon = pos.lng
 
     def save(self, *args, **kwargs):
         # Vor dem speichern in der DB:
