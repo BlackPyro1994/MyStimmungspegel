@@ -25,15 +25,16 @@
                 <p><b>Bierpreis:</b> {{ location.beer_price }}</p>
             </div>
             
-            <audio id="audioPlayer" controls>
-                <source id="audio-source" src="{{ location.last_audio_snippet.data.url }}" type="audio/wav">
+            <div id="audioCapture" class="form-horizontal">
+              {% if location.last_audio_snippet %}
+                <audio id="audioPlayer" src="{{location.last_audio_snippet.data.url}}" disabled controls>
             </audio>
-
+              {% else %}
+                <span id="audioPlayer"></span>
+              {% endif %}
+              <button class="form-control btn btn-primary" id="start-recording" onclick="record()">Audiosnippet aufnehmen</button>
+            </div>
             <br>
-            <button id="start-recording" onclick="record()">Start</button>
-            <br>
-
-
             <div>
                 <p><b>Letzte Bewertungen:</b></p>
                 <div class="pre-scrollable" id="ratings_list">
@@ -47,12 +48,9 @@
 
 
 {% block jquery %}
-
     <script src="https://cdn.webrtc-experiment.com/MediaStreamRecorder.js"></script>
 
-    <script>
-        console.log("ursprünlgiche url: {{location.last_audio_snippet.data.url}}");
-        
+    <script>      
          function updateRatings()
          {
               $("#ratings_list").empty();
