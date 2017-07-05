@@ -41,14 +41,15 @@
           radius: radius,
           excludePubs: options.excludePubs,
           excludeBars: options.excludeBars,
-          excludeClubs: options.excludeClubs
+          excludeClubs: options.excludeClubs,
+          order_by: options.order
         }
       })
       .done(function(locations) {
-        $("#sorting-radius").html(options.sortStr + " im Umkreis von " + radius + "km:");
+        $("#sorting-radius").html(options.orderStr + " im Umkreis von " + radius + "km:");
         $("#location_list").empty();
         
-        locations.sort(options.sortFunc);
+        //locations.sort(options.sortFunc);
 
         locations.forEach(function(location, index, array) {
           var rating_html = '';
