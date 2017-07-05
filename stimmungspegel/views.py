@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView
 from django.http import *
@@ -47,6 +48,16 @@ def get_locations(request):
         if data.get('excludeClubs', False):
             locations = locations.exclude(type=2)
 
+        # Sortierung
+        sort_method = data.get('order_by', 'r')
+        if sort_method == 'b':
+            locations = locations.order_by('beer_price')
+        elif sort_method == 'a':
+            locations = locations.order_by('admission')
+        else:
+            locations = locations.annotate(r=Avg('rating__value')).order_by('-r')
+
+        # print(locations.query)
         ser = serializers.LocationSerializer(locations, many=True)
         return JsonResponse(ser.data, safe=False)
     return HttpResponseNotAllowed(['GET'])
@@ -107,6 +118,15 @@ def search(request):
             locations = locations.exclude(type=1)
         if data.get('excludeClubs', False):
             locations = locations.exclude(type=2)
+
+        # Sortierung
+        sort_method = data.get('order_by', 'r')
+        if sort_method == 'b':
+            locations = locations.order_by('beer_price')
+        elif sort_method == 'a':
+            locations = locations.order_by('admission')
+        else:
+            locations = locations.annotate(r=Avg('rating__value')).order_by('-r')
 
         ser = serializers.LocationSerializer(locations, many=True)
         return JsonResponse(ser.data, safe=False)
