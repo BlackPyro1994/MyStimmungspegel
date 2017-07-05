@@ -33,7 +33,7 @@ def get_locations(request):
             return HttpResponseBadRequest()
 
         # Vergleichskoordinaten berechnen
-        minLat, minLon, maxLat, maxLon = bounding_coordinates(lat, lon, radius)
+        (minLat, minLon, maxLat, maxLon) = bounding_coordinates(lat, lon, radius)
         # Auswahl mit Vergleichskoordinaten eingrenzen
         locations = models.Location.objects
         locations = locations.filter(position_lat__gte=minLat, position_lon__gte=minLon)
