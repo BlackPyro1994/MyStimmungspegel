@@ -10,53 +10,7 @@ var setCookie = function(c_name, value) {
   document.cookie = c_name + "=" + encodeURIComponent(value);
 }
 
-
-// Sortierfunktionen
-
-var byRating = function(a, b) {
-  if(a.rating < b.rating) return 1;
-  else if (a.rating > b.rating) return -1;
-  return 0;
-}
-
-var byBeerPrice = function(a, b) {
-  if(a.beer_price > b.beer_price) return 1;
-  else if (a.beer_price < b.beer_price) return -1;
-  return 0;
-}
-
-var byAdmission = function(a, b) {
-  if(a.admission > b.admission) return 1;
-  else if (a.admission < b.admission) return -1;
-  return 0;
-}
-
 // Wrapper um "getCookie"
-
-var getSortFuncFromCookie = function() {
-  var typecookie = getCookie("type");
-  if (typecookie != null && typecookie.charAt(3) == '1') {
-    return {
-      sortFunc: byRating,
-      sortStr: "Beste Stimmung"
-    };
-  } else if (typecookie != null && typecookie.charAt(4) == '1') {
-    return {
-      sortFunc: byBeerPrice,
-      sortStr: "Günstigstes Bier"
-    };
-  } else if (typecookie != null && typecookie.charAt(5) == '1') {
-    return {
-      sortFunc: byAdmission,
-      sortStr: "Günstigster Eintritt"
-    };
-  }
-  return {
-    sortFunc: byRating,
-    sortStr: "Beste Stimmung"
-  };
-}
-
 var getRadius = function() {
   var c = getCookie("radius");
   if (c) {
@@ -68,8 +22,8 @@ var getRadius = function() {
 var getSearchOptions = function() {
   var typecookie = getCookie("type");
   var opts = {
-    sortFunc: byRating,
-    sortStr: "Beste Stimmung",
+    order: 'rating',
+    orderStr: "Beste Stimmung",
     excludePubs: '',
     excludeBars: '',
     excludeClubs: ''
@@ -87,14 +41,14 @@ var getSearchOptions = function() {
     opts.excludeClubs = '1';
   }
   if (typecookie.charAt(3) == '1') {
-    opts.sortFunc = byRating,
-    opts.sortStr = "Beste Stimmung"
+    opts.order = 'r',
+    opts.orderStr = "Beste Stimmung"
   } else if (typecookie.charAt(4) == '1') {
-    opts.sortFunc = byBeerPrice;
-    opts.sortStr = "Günstigstes Bier";
+    opts.order = 'b';
+    opts.orderStr = "Günstigstes Bier";
   } else if (typecookie.charAt(5) == '1') {
-    opts.sortFunc = byAdmission;
-    opts.sortStr = "Günstigster Eintritt";
+    opts.order = 'a';
+    opts.orderStr = "Günstigster Eintritt";
   }
   return opts;
 }
