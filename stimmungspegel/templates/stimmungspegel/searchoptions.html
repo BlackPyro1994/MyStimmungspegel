@@ -25,7 +25,7 @@
           <label for="name">Sortieren nach:</label>
         </div>
         <div class="col-md-8 col-xs-12">
-          <label class="radio-inline"><input type="radio" id="StimmungRadio" checked="true"
+          <label class="radio-inline"><input type="radio" id="StimmungsRadio" checked="true"
                                              name="optradio">Stimmung</label>
           <label class="radio-inline"><input type="radio" id="BierpreisRadio" name="optradio">Bierpreis</label>
           <label class="radio-inline"><input type="radio" id="EintrittRadio" name="optradio">Eintritt</label>
@@ -36,7 +36,7 @@
           <label for="name">Lokalisierung:</label>
         </div>
         <div class="col-md-8 col-xs-12">
-          <label class="radio-inline"><input type="radio" id="KarteGPS" checked="true"
+          <label class="radio-inline"><input type="radio" id="KarteGPS" checked="true" onclick="tryGPS()"
                                              name="optradio1">Geolocation</label>
           <label class="radio-inline"><input type="radio" id="KarteAdresse" name="optradio1">Adresse</label>
         </div>
@@ -80,259 +80,205 @@
 
 {% block jquery %}
   <script>
-     function saveAll()
-     {
-        var type = "";
-        var radius = "";
-        var stadt = "";
-        var postleitzahl = "";
-        var street = "";
 
-        if (document.getElementById("KarteAdresse").checked)
-        {
-           console.log("entweder");
-           if (document.getElementById("StadtID").value != "")
-           {
+      function tryGPS()
+      {
 
-              if (document.getElementById("KneipeID").checked)
+          console.log("#######################################");
+
+          // deleteCookie("lon");
+          // deleteCookie("lat");
+
+          if (navigator.geolocation)
+          {
+              var bool = navigator.geolocation.getCurrentPosition(showPosition);
+
+              function showPosition(position)
               {
-                 type = type + "1";
+                  var latitude = position.coords.latitude;
+                  var longitude = position.coords.longitude;
 
-              } else
-              {
-                 type = type + "0";
+
+                  console.log("latitude : " + latitude);
+                  console.log("longitude : " + longitude);
+
+                  return (latitude != null && longitude != null) ? true : false;
+
 
               }
 
-              if (document.getElementById("BarsID").checked)
-              {
-                 type = type + "1";
-              } else
-              {
-                 type = type + "0";
-              }
+              console.log("GPS vorhanden!");
+          }
+          else
+          {
+              {# TEST #}
+              console.log("Nutze Manuelle Eingabe der Adresse !");
+              // document.getElementById("KarteGPS").disabled = "disabled";
+              document.getElementById("KarteGPS").checked = false;
+              // document.getElementById("KarteAdresse").disabled = "disabled";
+              document.getElementById("KarteAdresse").checked = true;
+          }
 
-              if (document.getElementById("ClubsID").checked)
-              {
-                 type = type + "1";
-              } else
-              {
-                 type = type + "0";
-              }
+      }
 
-              if (document.getElementById("StimmungRadio").checked)
-              {
-                 type = type + "1";
-              } else
-              {
-                 type = type + "0";
-              }
+      function saveAll()
+      {
+          console.log("#######################################");
 
-              if (document.getElementById("BierpreisRadio").checked)
-              {
-                 type = type + "1";
-              } else
-              {
-                 type = type + "0";
-              }
+          var type = "";
+          var radius = "";
+          var stadt = "";
+          var postleitzahl = "";
+          var street = "";
 
-              if (document.getElementById("EintrittRadio").checked)
-              {
-                 type = type + "1";
-              } else
-              {
-                 type = type + "0";
-              }
+          if (document.getElementById("KarteAdresse").checked)
+          {
+              console.log("Karte Adresse : CHECKED");
 
-              if (document.getElementById("KarteGPS").checked)
+              if (document.getElementById("StadtID").value != "")
               {
-                 type = type + "1";
-              } else
-              {
-                 type = type + "0";
-              }
+                  type = (document.getElementById("KneipeID").checked) ? "1" : "0";
+                  type += (document.getElementById("BarsID").checked) ? "1" : "0";
+                  type += (document.getElementById("ClubsID").checked) ? "1" : "0";
+                  type += (document.getElementById("StimmungsRadio").checked) ? "1" : "0";
+                  type += (document.getElementById("BierpreisRadio").checked) ? "1" : "0";
+                  type += (document.getElementById("EintrittRadio").checked) ? "1" : "0";
+                  type += (document.getElementById("KarteGPS").checked) ? "1" : "0";
 
-              if (document.getElementById("KarteAdresse").checked)
-              {
-                 type = type + "1";
-              } else
-              {
-                 type = type + "0";
+                  // console.log("type before setCookie : " + type);
+
+                  setCookie("type", type);
+                  setCookie("radius", document.getElementById("RadiusID").value);
+                  setCookie("city", document.getElementById("StadtID").value);
+                  setCookie("zipcode", document.getElementById("PostleitzahlID").value);
+                  setCookie("straße", document.getElementById("StreetID").value);
+
+                  document.getElementById("stadtFormGroup").className = document.getElementById("stadtFormGroup").className.replace("has-error", "");
+
               }
+              else
+              {
+                  // $("#StadtID").addClass("has-error");
+                  console.log("Stadt Parameter : EMPTY");
+                  document.getElementById("stadtFormGroup").className += " has-error";
+              }
+          }
+          else
+          {
+              console.log("GPS : CHECKED");
+
+              type = (document.getElementById("KneipeID").checked) ? "1" : "0";
+              type += (document.getElementById("BarsID").checked) ? "1" : "0";
+              type += (document.getElementById("ClubsID").checked) ? "1" : "0";
+              type += (document.getElementById("StimmungsRadio").checked) ? "1" : "0";
+              type += (document.getElementById("BierpreisRadio").checked) ? "1" : "0";
+              type += (document.getElementById("EintrittRadio").checked) ? "1" : "0";
+              type += (document.getElementById("KarteGPS").checked) ? "1" : "0";
+
+              console.log("type before setCookie : " + type);
+
+              document.getElementById("stadtFormGroup").className = document.getElementById("stadtFormGroup").className.replace("has-error", "");
 
               setCookie("type", type);
               setCookie("radius", document.getElementById("RadiusID").value);
-              setCookie("city", document.getElementById("StadtID").value);
-              setCookie("zipcode", document.getElementById("PostleitzahlID").value);
-              setCookie("address", document.getElementById("StreetID").value);
-              document.getElementById("stadtFormGroup").className = document.getElementById("stadtFormGroup").className.replace("has-error", "");
+          }
 
-           }
-           else
-           {
-              // $("#StadtID").addClass("has-error");
+          return true;
+      }
 
-              document.getElementById("stadtFormGroup").className += " has-error";
-           }
-        }
-        else
-        {
-           console.log("oder");
-           if (document.getElementById("KneipeID").checked)
-           {
-              type = type + "1";
+      function loadCookieData()
+      {
+          var typecookie = getCookie("type");
 
-           } else
-           {
-              type = type + "0";
+          if (typecookie != null)
+          {
+              // console.log("typecookie = " + typecookie);
 
-           }
-
-           if (document.getElementById("BarsID").checked)
-           {
-              type = type + "1";
-           } else
-           {
-              type = type + "0";
-           }
-
-           if (document.getElementById("ClubsID").checked)
-           {
-              type = type + "1";
-           } else
-           {
-              type = type + "0";
-           }
-
-           if (document.getElementById("StimmungRadio").checked)
-           {
-              type = type + "1";
-           } else
-           {
-              type = type + "0";
-           }
-
-           if (document.getElementById("BierpreisRadio").checked)
-           {
-              type = type + "1";
-           } else
-           {
-              type = type + "0";
-           }
-
-           if (document.getElementById("EintrittRadio").checked)
-           {
-              type = type + "1";
-           } else
-           {
-              type = type + "0";
-           }
-
-           if (document.getElementById("KarteGPS").checked)
-           {
-              type = type + "1";
-           } else
-           {
-              type = type + "0";
-           }
-
-           if (document.getElementById("KarteAdresse").checked)
-           {
-              type = type + "1";
-           } else
-           {
-              type = type + "0";
-           }
-
-           
-           document.getElementById("stadtFormGroup").className = document.getElementById("stadtFormGroup").className.replace("has-error", "");
-           setCookie("type", type);
-           setCookie("radius", document.getElementById("RadiusID").value);
-        }
-
-        return true;
-     }
-
-     $(document).ready(function ()
-     {
-
-        var typecookie = getCookie("type");
-
-        if (typecookie != null)
-        {
-           // console.log("typecookie = " + typecookie);
-
-           if (typecookie.toString().charAt(0) == '1')
-           {
+              document.getElementById("KneipeID").checked = (typecookie.toString().charAt(0) == '1') ? true : false;
+              document.getElementById("BarsID").checked = (typecookie.toString().charAt(1) == '1') ? true : false;
+              document.getElementById("ClubsID").checked = (typecookie.toString().charAt(2) == '1') ? true : false;
+              document.getElementById("StimmungsRadio").checked = (typecookie.toString().charAt(3) == '1') ? true : false;
+              document.getElementById("BierpreisRadio").checked = (typecookie.toString().charAt(4) == '1') ? true : false;
+              document.getElementById("EintrittRadio").checked = (typecookie.toString().charAt(5) == '1') ? true : false;
+              document.getElementById("KarteGPS").checked = (typecookie.toString().charAt(6) == '1') ? true : false;
+          }
+          else
+          {
               document.getElementById("KneipeID").checked = true;
-              // $("#KneipeID").checked = true;
-           }
-           if (typecookie.toString().charAt(1) == '1')
-           {
               document.getElementById("BarsID").checked = true;
-           }
-           if (typecookie.toString().charAt(2) == '1')
-           {
               document.getElementById("ClubsID").checked = true;
-           }
-           if (typecookie.toString().charAt(3) == '1')
-           {
-              document.getElementById("StimmungRadio").checked = true;
-           }
-           if (typecookie.toString().charAt(4) == '1')
-           {
-              document.getElementById("BierpreisRadio").checked = true;
-           }
-           if (typecookie.toString().charAt(5) == '1')
-           {
-              document.getElementById("EintrittRadio").checked = true;
-           }
-           if (typecookie.toString().charAt(6) == '1')
-           {
+              document.getElementById("StimmungsRadio").checked = true;
               document.getElementById("KarteGPS").checked = true;
-           } else
-           {
+          }
+
+          var temporary;
+
+          if (getCookie("radius") != null)
+          {
+              temporary = getCookie("radius");
+              console.log("Radius : " + temporary);
+              document.getElementById("RadiusID").value = temporary
+
+          }
+          else
+          {
+
+              document.getElementById("RadiusID").value = 10;
+          }
+
+          // ################################################################################
+
+          if (getCookie("city") != null)
+          {
+              temporary = getCookie("city");
+              console.log("city : " + temporary);
+              document.getElementById("StadtID").value = temporary;
+          }
+
+          //####################################################################################
+
+          if (getCookie("zipcode") != null)
+          {
+              temporary = getCookie("zipcode");
+              console.log("PostleitzahlID : " + temporary);
+              document.getElementById("PostleitzahlID").value = temporary;
+          }
+
+          //####################################################################################
+
+          if (getCookie("straße") != null)
+          {
+              temporary = getCookie("straße");
+              console.log("Straße : " + temporary);
+              document.getElementById("StreetID").value = temporary;
+          }
+      }
+
+      $(document).ready(function ()
+      {
+          console.log("############# DOCUMENT READY ##############");
+
+          loadCookieData();
+
+          tryGPS();
+
+          if (!navigator.geolocation)
+          {
+              console.log("GPS vorhanden!");
+
+              document.getElementById("KarteGPS").disabled = "disabled";
+              document.getElementById("KarteGPS").checked = false;
+              document.getElementById("KarteAdresse").disabled = "disabled";
               document.getElementById("KarteAdresse").checked = true;
-           }
-        }
-        else
-        {
-           document.getElementById("KneipeID").checked = true;
-           document.getElementById("BarsID").checked = true;
-           document.getElementById("ClubsID").checked = true;
-           document.getElementById("StimmungRadio").checked = true;
-           document.getElementById("KarteGPS").checked = true;
-        }
+          }
+          else
+          {
+              console.log("Nutze Manuelle Eingabe der Adresse !");
+          }
 
-        if (getCookie("radius") != null)
-        {
-           document.getElementById("RadiusID").value = getCookie("radius");
-        }
-        else
-        {
-           document.getElementById("RadiusID").value = 10;
-        }
-        if (getCookie("city") != null)
-        {
-           document.getElementById("StadtID").value = getCookie("city");
-        }
-        if (getCookie("zipcode") != null)
-        {
-           document.getElementById("PostleitzahlID").value = getCookie("zipcode");
-        }
-        if (getCookie("address") != null)
-        {
-           document.getElementById("StreetID").value = getCookie("address");
-        }
+          //####################################
+      });
 
-        if (!navigator.geolocation)
-        {
-           document.getElementById("KarteGPS").disabled = "disabled";
-           document.getElementById("KarteGPS").checked = false;
-           document.getElementById("KarteAdresse").disabled = "disabled";
-           document.getElementById("KarteAdresse").checked = true;
-        }
-     });
   </script>
 {% endblock jquery %}
 

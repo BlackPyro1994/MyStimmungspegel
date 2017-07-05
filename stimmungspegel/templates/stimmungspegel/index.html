@@ -1,85 +1,102 @@
 {% extends "stimmungspegel/base.html" %}
 
 {% block content %}
-<div class="row">
-  <!-- Map -->
-  <div class="col-xs-12 col-md-6">
-    <div class="map" id="map"></div>
-  </div>
+  <div class="row">
+    <!-- Map -->
+    <div class="col-xs-12 col-md-6">
+      <div class="map" id="map"></div>
+    </div>
 
-  <!-- Top Ten oder so... -->
-  <div class="col-xs-12 col-md-6">
-    <h4 id="sorting-radius"></h4>
-    <div id="location_list">
-      <div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>  
+    <!-- Top Ten oder so... -->
+    <div class="col-xs-12 col-md-6">
+      <h4 id="sorting-radius"></h4>
+      <div id="location_list">
+        <div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>
+      </div>
     </div>
   </div>
-</div>
 {% endblock %}
 
 {% block jquery %}
-<script>
-  $(document).ready(function () {
-    var radius = getRadius();
-    var options = getSearchOptions();
-    if (radius == null) {
-      radius = 10
-    }
-    
-    getPosition(function(pos) {
-      map = StimmungspegelMap();
-      map.createMap(pos.lon, pos.lat, 12);
-      map.addMarker(null, pos.lon, pos.lat, null);
-      
-      $.ajax({
-        type: "GET",
-        url: "{% url 'getlocations' %}",
-        dataType: "json",
-        data: {
-          lat: pos.lat,
-          lon: pos.lon,
-          radius: radius,
-          excludePubs: options.excludePubs,
-          excludeBars: options.excludeBars,
-          excludeClubs: options.excludeClubs,
-          order_by: options.order
-        }
-      })
-      .done(function(locations) {
-        $("#sorting-radius").html(options.orderStr + " im Umkreis von " + radius + "km:");
-        $("#location_list").empty();
-        
-        //locations.sort(options.sortFunc);
+  <script>
+      $(document).ready(function ()
+      {
+          var radius = getRadius();
+          console.log("Index.html >>> " + "radius : " + radius);
 
-        locations.forEach(function(location, index, array) {
-          var rating_html = '';
-          for (var i = 0; i < location.rating.toFixed(); i++) {
-            rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
+          var options = getSearchOptions();
+          console.log("Index.html >>> " + "options : " + options);
+
+          if (radius == null)
+          {
+              radius = 10
+              console.log("Index.html >>> " + "radius : " + "Default = " + radius);
           }
-          for (var i = 0; i < 5 - location.rating.toFixed(); i++) {
-            rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>"; 
-          }
-          $("#location_list").append(
-            '<div class="location well well-sm"' +
-            '<p><b><a href="/detail/' + location.id + '">' + location.name + '</a></b></p>' +
-            '<p>Stimmung: ' + rating_html + '</p>' +
-            '<p>Bierpreis: ' + location.beer_price + '</p>' +
-            '<p>Eintritt: ' + location.admission + '</p>' +
-            '</div>'
-          );
-          map.addMarker(location.id, location.position_lon, location.position_lat, location);
-          map.onMarkerSingleClick(location.id, function() {
-            window.location = "/detail/" + location.id;
+
+          getPosition(function (pos)
+          {
+              map = StimmungspegelMap();
+              map.createMap(pos.lon, pos.lat, 12);
+              map.addMarker(null, pos.lon, pos.lat, null);
+
+              $.ajax({
+                      type: "GET",
+                      url: "{% url 'getlocations' %}",
+                      dataType: "json",
+                      data: {
+                          lat: pos.lat,
+                          lon: pos.lon,
+                          radius: radius,
+                          excludePubs: options.excludePubs,
+                          excludeBars: options.excludeBars,
+                          excludeClubs: options.excludeClubs,
+                          order_by: options.order
+                      }
+                  })
+                  .done(function (locations)
+                  {
+                      $("#sorting-radius").html(options.orderStr + " im Umkreis von " + radius + "km:");
+                      $("#location_list").empty();
+
+                      //locations.sort(options.sortFunc);
+
+                      locations.forEach(function (location, index, array)
+                      {
+                          var rating_html = '';
+                          for (var i = 0; i < location.rating.toFixed(); i++)
+                          {
+                              rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
+                          }
+                          for (var i = 0; i < 5 - location.rating.toFixed(); i++)
+                          {
+                              rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>";
+                          }
+                          $("#location_list").append(
+                              '<div class="location well well-sm"' +
+                              '<p><b><a href="/detail/' + location.id + '">' + location.name + '</a></b></p>' +
+                              '<p>Stimmung: ' + rating_html + '</p>' +
+                              '<p>Bierpreis: ' + location.beer_price + '</p>' +
+                              '<p>Eintritt: ' + location.admission + '</p>' +
+                              '</div>'
+                          );
+                          map.addMarker(location.id, location.position_lon, location.position_lat, location);
+                          map.onMarkerSingleClick(location.id, function ()
+                          {
+                              window.location = "/detail/" + location.id;
+                          });
+                      });
+                  })
+                  .fail(function (xhr, status, errorThrown)
+                  {
+                      console.log("Error: " + errorThrown);
+                      console.log("Status: " + status);
+                      $("#location_list").empty();
+                      $("#location_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
+                  });
+          }, function (error)
+          {
+              alert(error.message);
           });
-        });
-      })
-      .fail(function(xhr, status, errorThrown) {
-        console.log("Error: " + errorThrown);
-        console.log("Status: " + status);
-        $("#location_list").empty();
-        $("#location_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
       });
-    }, function(error) { alert(error.message); });
-  });
-</script>
+  </script>
 {% endblock %}
