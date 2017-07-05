@@ -7,6 +7,7 @@ Ratings generiert.
 """
 import csv
 import datetime
+import glob
 import os
 import random
 
@@ -14,6 +15,8 @@ import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stimmungspegel_site.settings')
 django.setup()
+
+from django.conf import settings
 
 from stimmungspegel.models import Location
 from stimmungspegel.models import Rating
@@ -27,6 +30,14 @@ if __name__ == '__main__':
     Rating.objects.all().delete()
     Location.objects.all().delete()
     print(' done.')
+
+    # clean media directory
+    media_dir = settings.MEDIA_ROOT or None
+    if media_dir:
+        print('cleaning {}...'.format(media_dir), end='', flush=True)
+        for path in glob.glob(os.path.join(os.path.abspath(media_dir), 'audiosnippets/*')):
+            os.unlink(path)
+        print(' done.')
 
     # create locations
     print('creating locations and ratings...', end='', flush=True)
