@@ -26,7 +26,7 @@
       radius = 10
     }
     
-    getPosition(true, function(pos) {
+    getPosition(function(pos) {
       map = StimmungspegelMap();
       map.createMap(pos.lon, pos.lat, 12);
       map.addMarker(null, pos.lon, pos.lat, null);

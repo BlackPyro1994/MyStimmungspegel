@@ -32,7 +32,7 @@
   var options = getSearchOptions();
   map = StimmungspegelMap();
   
-  getPosition(false, function(pos) {
+  getPosition(function(pos) {
     position = pos;
     map.createMap(pos.lon, pos.lat, 12);
     map.addMarker(null, pos.lon, pos.lat, null);

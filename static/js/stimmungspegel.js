@@ -10,6 +10,18 @@ var setCookie = function(c_name, value) {
   document.cookie = c_name + "=" + encodeURIComponent(value);
 }
 
+var deleteCookie = function(name) {
+  document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+}
+
+// setzt automatisch defaults, wenn keine Cookies vorhanden
+if (getCookie("type") === null) {
+  setCookie("type", "11110010");
+}
+if (getCookie("radius") === null) {
+  setCookie("radius", 10);
+}
+
 // Wrapper um "getCookie"
 var getRadius = function() {
   var c = getCookie("radius");
@@ -53,11 +65,11 @@ var getSearchOptions = function() {
   return opts;
 }
 
-var getPosition = function(refresh, callback, errorCallback) {
+var getPosition = function(callback, errorCallback) {
   var lat = getCookie("lat");
   var lon = getCookie("lon");
   var options = getCookie("type");
-  if ((refresh || lat === null || lon === null)) {
+  if (lat === null || lon === null) {
     if (options !== null && options.charAt(6) == '1') {
     // Position über Geolocation ermitteln
       if (navigator.geolocation) {

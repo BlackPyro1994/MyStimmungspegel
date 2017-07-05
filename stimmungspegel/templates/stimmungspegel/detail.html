@@ -99,7 +99,7 @@
               map = StimmungspegelMap();
               map.createMap({{ location.position_lon }}, {{ location.position_lat }}, 17);
               map.addMarker(null, {{ location.position_lon }}, {{ location.position_lat }}, {type: {{location.type}}});
-              getPosition(true, function (pos)
+              getPosition(function (pos)
               {
                    map.addMarker(null, pos.lon, pos.lat, null);
               });
