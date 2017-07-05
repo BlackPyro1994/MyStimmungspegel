@@ -1,94 +1,132 @@
 {% extends "stimmungspegel/base.html" %}
 
 
-{% block title %}{{block.super}} – Suche{% endblock %}
+{% block title %}{{ block.super }} – Suche{% endblock %}
 
 {% block content %}
-<div class="row">
-  <!-- Map -->
-  <div class="col-xs-12 col-md-6">
-    <div class="map" id="map"></div>
-  </div>
+    <div class="row">
+        <!-- Map -->
+        <div class="col-xs-12 col-md-6">
+            <div class="map" id="map"></div>
+        </div>
 
 
-  <div class="col-xs-12 col-md-6">
-    <h4>Suche</h4>
-    <div>
-      <div class="form-group">
-        <label for="search-string" class="sr-only">Suchbegriff</label>
-        <input class="form-control "type="text" name="search-string" id="search-string" placeholder="Suchbegriff">
-      </div>
-      <button onclick="performSearch()" class="form-control btn btn-primary">Suche</button>
+        <div class="col-xs-12 col-md-6">
+
+            <h4 style="font-size: 30px"> Suche (Namen) : </h4>
+
+            <div>
+
+                <div class="form-group">
+
+                    <label for="search-string" class="sr-only">Suchbegriff</label>
+
+                    <input class="form-control" type="text" name="search-string" id="search-string" placeholder="Suchbegriff">
+
+                </div>
+
+                {# <button onclick="performSearch()" class="form-control btn btn-primary">Suche</button> #}
+
+            </div>
+
+            <br>
+
+            <div id="location_list"></div>
+
+        </div>
     </div>
-    <br>
-    <div id="location_list"></div>
-  </div>
-</div>
 {% endblock %}
 
 {% block jquery %}
-<script>
-  var position;
-  var options = getSearchOptions();
-  map = StimmungspegelMap();
-  
-  getPosition(function(pos) {
-    position = pos;
-    map.createMap(pos.lon, pos.lat, 12);
-    map.addMarker(null, pos.lon, pos.lat, null);
-  }, function(error) {alert(error.message);});
-  
-  
-  function performSearch() {
-    map.removeAllMarkers();
-    map.addMarker(null, position.lon, position.lat, null);
-    $("#location_list").html('<div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>');
-    $.ajax({
-      type: 'GET',
-      url: "{% url 'perform_search' %}",
-      dataType: "json",
-      data: {
-        q: $("#search-string").val(),
-        lat: position.lat,
-        lon: position.lon,
-        radius: getRadius(),
-        excludePubs: options.excludePubs,
-        excludeBars: options.excludeBars,
-        excludeClubs: options.excludeClubs,
-        order_by: options.order
-      }
-    })
-    .done(function(locations) {
-      $("#location_list").empty();
-      
-      locations.forEach(function(location, index, array) {
-        var rating_html = '';
-        for (var i = 0; i < location.rating.toFixed(); i++) {
-          rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
-        }
-        for (var i = 0; i < 5 - location.rating.toFixed(); i++) {
-          rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>"; 
-        }
-        $("#location_list").append(
-          '<div class="location well well-sm"' +
-          '<p><b><a href="/detail/' + location.id + '">' + location.name + '</a></b></p>' +
-          '<p>Stimmung: ' + rating_html + '</p>' +
-          '<p>Bierpreis: ' + location.beer_price + '</p>' +
-          '<p>Eintritt: ' + location.admission + '</p>' +
-          '</div>'
-        );
-        map.addMarker(location.id, location.position_lon, location.position_lat, location);
-        map.onMarkerSingleClick(location.id, function() {
-          window.location = "/detail/" + location.id;
+    <script>
+
+        $("#search-string").focus();
+
+        $("#search-string").on('keyup', function (e)
+        {
+            if (e.keyCode == 13)
+            {
+                performSearch();
+            }
         });
-      });
-    })
-    .fail(function(xhr, status, errorThrown) {
-      console.log("Error: " + errorThrown);
-      console.log("Status: " + status);
-      $("#location_list").empty();
-      $("#location_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
-    });
-  }
-</script>
+
+        var position;
+        var options = getSearchOptions();
+        map = StimmungspegelMap();
+
+        getPosition(function (pos)
+        {
+            position = pos;
+            map.createMap(pos.lon, pos.lat, 12);
+            map.addMarker(null, pos.lon, pos.lat, null);
+        }, function (error)
+        {
+            alert(error.message);
+        });
+
+
+        function performSearch()
+        {
+            console.log("CALL -> performSearch");
+
+            map.removeAllMarkers();
+
+            map.addMarker(null, position.lon, position.lat, null);
+
+            $("#location_list").html('<div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>');
+
+            $.ajax({
+                    type: 'GET',
+                    url: "{% url 'perform_search' %}",
+                    dataType: "json",
+                    data: {
+                        q: $("#search-string").val(),
+                        lat: position.lat,
+                        lon: position.lon,
+                        radius: getRadius(),
+                        excludePubs: options.excludePubs,
+                        excludeBars: options.excludeBars,
+                        excludeClubs: options.excludeClubs,
+                        order_by: options.order
+                    }
+                })
+                .done(function (locations)
+                {
+                    $("#location_list").empty();
+
+                    locations.forEach(function (location, index, array)
+                    {
+                        var rating_html = '';
+                        for (var i = 0; i < location.rating.toFixed(); i++)
+                        {
+                            rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
+                        }
+                        for (var i = 0; i < 5 - location.rating.toFixed(); i++)
+                        {
+                            rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>";
+                        }
+                        $("#location_list").append(
+                            '<div class="location well well-sm"' +
+                            '<p><b><a href="/detail/' + location.id + '">' + location.name + '</a></b></p>' +
+                            '<p>Stimmung: ' + rating_html + '</p>' +
+                            '<p>Bierpreis: ' + location.beer_price + '</p>' +
+                            '<p>Eintritt: ' + location.admission + '</p>' +
+                            '</div>'
+                        );
+                        map.addMarker(location.id, location.position_lon, location.position_lat, location);
+                        map.onMarkerSingleClick(location.id, function ()
+                        {
+                            window.location = "/detail/" + location.id;
+                        });
+                    });
+                })
+                .fail(function (xhr, status, errorThrown)
+                {
+                    console.log("Error: " + errorThrown);
+                    console.log("Status: " + status);
+                    $("#location_list").empty();
+                    $("#location_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
+                });
+        }
+    </script>
 {% endblock jquery %}

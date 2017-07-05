@@ -1,102 +1,162 @@
 {% extends "stimmungspegel/base.html" %}
 
 {% block content %}
-  <div class="row">
-    <!-- Map -->
-    <div class="col-xs-12 col-md-6">
-      <div class="map" id="map"></div>
-    </div>
+    <div class="row">
+        <!-- Map -->
+        <div class="col-xs-12 col-md-6">
+            <div class="map" id="map"></div>
+        </div>
 
-    <!-- Top Ten oder so... -->
-    <div class="col-xs-12 col-md-6">
-      <h4 id="sorting-radius"></h4>
-      <div id="location_list">
-        <div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>
-      </div>
+        <!-- Top Ten oder so... -->
+        <div class="col-xs-12 col-md-6">
+
+            {# <h4 id="sorting-radius"></h4> #}
+
+            <div id="sorting-radius" style="font-size:22px"></div><br>
+
+            <div id="location_list">
+                <div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>
+            </div>
+        </div>
     </div>
-  </div>
 {% endblock %}
 
 {% block jquery %}
-  <script>
-      $(document).ready(function ()
-      {
-          var radius = getRadius();
-          console.log("Index.html >>> " + "radius : " + radius);
+    <script>
+        $(document).ready(function ()
+        {
+            console.log("");
+            console.log("");
+            console.log("########### LOADING PAGE   ##########");
+            console.log("");
+            console.log("");
 
-          var options = getSearchOptions();
-          console.log("Index.html >>> " + "options : " + options);
+            if ((getCookie("input_error") == "1" ? true : false))
+            {
+                window.location = "/searchoptions";
+            }
 
-          if (radius == null)
-          {
-              radius = 10
-              console.log("Index.html >>> " + "radius : " + "Default = " + radius);
-          }
+            var radius = getRadius();
+            console.log("Index.html >>> " + "radius : " + radius);
 
-          getPosition(function (pos)
-          {
-              map = StimmungspegelMap();
-              map.createMap(pos.lon, pos.lat, 12);
-              map.addMarker(null, pos.lon, pos.lat, null);
+            var options = getSearchOptions();
+            console.log("Index.html >>> " + "options : " + options);
 
-              $.ajax({
-                      type: "GET",
-                      url: "{% url 'getlocations' %}",
-                      dataType: "json",
-                      data: {
-                          lat: pos.lat,
-                          lon: pos.lon,
-                          radius: radius,
-                          excludePubs: options.excludePubs,
-                          excludeBars: options.excludeBars,
-                          excludeClubs: options.excludeClubs,
-                          order_by: options.order
-                      }
-                  })
-                  .done(function (locations)
-                  {
-                      $("#sorting-radius").html(options.orderStr + " im Umkreis von " + radius + "km:");
-                      $("#location_list").empty();
+            if (radius == null)
+            {
+                radius = 10
+                console.log("Index.html >>> " + "radius : " + "Default = " + radius);
+            }
 
-                      //locations.sort(options.sortFunc);
 
-                      locations.forEach(function (location, index, array)
-                      {
-                          var rating_html = '';
-                          for (var i = 0; i < location.rating.toFixed(); i++)
-                          {
-                              rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
-                          }
-                          for (var i = 0; i < 5 - location.rating.toFixed(); i++)
-                          {
-                              rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>";
-                          }
-                          $("#location_list").append(
-                              '<div class="location well well-sm"' +
-                              '<p><b><a href="/detail/' + location.id + '">' + location.name + '</a></b></p>' +
-                              '<p>Stimmung: ' + rating_html + '</p>' +
-                              '<p>Bierpreis: ' + location.beer_price + '</p>' +
-                              '<p>Eintritt: ' + location.admission + '</p>' +
-                              '</div>'
-                          );
-                          map.addMarker(location.id, location.position_lon, location.position_lat, location);
-                          map.onMarkerSingleClick(location.id, function ()
-                          {
-                              window.location = "/detail/" + location.id;
-                          });
-                      });
-                  })
-                  .fail(function (xhr, status, errorThrown)
-                  {
-                      console.log("Error: " + errorThrown);
-                      console.log("Status: " + status);
-                      $("#location_list").empty();
-                      $("#location_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
-                  });
-          }, function (error)
-          {
-              alert(error.message);
-          });
-      });
-  </script>
+            {# ############################################################################################################ #}
+            {# ############################################################################################################ #}
+            {# ############################################################################################################ #}
+
+
+            getPosition(function (pos)
+            {
+                ////////////////////////////////
+                console.log("index.html >>> getPosition(function (pos)");
+                //////////////////////////////////
+
+                console.log("index.html >>> " + "Pos.lon : " + (pos.lon == "6.5972026999999995") ? "Default Position" : pos.lon);
+                console.log("index.html >>> " + "Pos.lat : " + (pos.lat == "51.089301999999996") ? "Default Position" : pos.lat);
+
+                map = StimmungspegelMap();
+
+                map.createMap(pos.lon, pos.lat, 12);
+
+                map.addMarker(null, pos.lon, pos.lat, null);
+
+                $.ajax({
+                        type: "GET",
+                        url: "{% url 'getlocations' %}",
+                        dataType: "json",
+                        data: {
+                            lat: pos.lat,
+                            lon: pos.lon,
+                            radius: radius,
+                            excludePubs: options.excludePubs,
+                            excludeBars: options.excludeBars,
+                            excludeClubs: options.excludeClubs,
+                            order_by: options.order
+                        }
+                    })
+                    .done(function (locations)
+                    {
+                        console.log(".done(function (locations)");
+
+                        console.log("");
+                        console.log("---> " + locations.length + " Treffer ");
+                        console.log("");
+
+                        if(locations.length!=0)
+                        {
+                            $("#sorting-radius").html(options.orderStr + " im Umkreis von " + radius + "km:");
+                        }
+                        else
+                        {
+                        $("#sorting-radius").html(" Keine Einträge im Umkreis von " + radius + "km: vorhanden !!!");
+                        }
+
+
+                        $("#location_list").empty();
+
+                        //locations.sort(options.sortFunc);
+
+                        locations.forEach(function (location, index, array)
+                        {
+                            var rating_html = '';
+
+                            for (var i = 0; i < location.rating.toFixed(); i++)
+                            {
+                                rating_html = rating_html + "<i class=\"fa fa-star\"></i>";
+                            }
+                            for (var i = 0; i < 5 - location.rating.toFixed(); i++)
+                            {
+                                rating_html = rating_html + "<i class=\"fa fa-star-o\"></i>";
+                            }
+
+                            {# mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm #}
+
+                            $("#location_list").append(
+                                '<div class="location well well-sm"' +
+                                '<p><b><a href="/detail/' + location.id + '">' + location.name + '</a></b></p>' +
+                                '<p>Stimmung: ' + rating_html + '</p>' +
+                                '<p>Bierpreis: ' + location.beer_price + '</p>' +
+                                '<p>Eintritt: ' + location.admission + '</p>' +
+                                '</div>'
+                            );
+
+                            {# mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm #}
+
+                            // addMarker( id , lon , lat , data )
+
+                            map.addMarker(location.id, location.position_lon, location.position_lat, location);
+
+                            map.onMarkerSingleClick(location.id, function ()
+                            {
+                                window.location = "/detail/" + location.id;
+                            });
+                        });
+                    })
+                    // .fail(function (xhr, status, errorThrown)
+
+                    .fail(function ()
+                    {
+                        // console.log("Error: " + errorThrown);
+                        // console.log("Status: " + status);
+                        console.log("Fehler -> Liste empty ");
+
+                        $("#location_list").empty();
+                        $("#location_list").html("<p><i>Irgendetwas ist schief gelaufen&hellip; Sorry.</i></p>");
+
+                    });
+            }, function (error)
+            {
+                alert(error.message);
+            });
+        });
+    </script>
 {% endblock %}
