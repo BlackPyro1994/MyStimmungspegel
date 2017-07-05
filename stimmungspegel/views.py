@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView
@@ -146,14 +147,14 @@ def add_location(request):
             loc.city = request.POST['city']
             try:
                 loc.save()
-            except:
+            except IntegrityError:
                 ctxt = {
                     'error': 'Adresse ungültig',
                     'form': request.POST
                 }
                 return render(request, "stimmungspegel/add.html", context=ctxt)
             return HttpResponseRedirect(loc.get_absolute_url())
-        except:
+        except (KeyError, ValueError):
             return HttpResponseBadRequest()
     else:
         return render(request, "stimmungspegel/add.html")
