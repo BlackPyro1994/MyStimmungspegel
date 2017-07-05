@@ -34,14 +34,14 @@ if __name__ == '__main__':
     # clean media directory
     media_dir = settings.MEDIA_ROOT or None
     if media_dir:
-        print('cleaning {}...'.format(media_dir), end='', flush=True)
+        print('cleaning MEDIA_ROOT', end='', flush=True)
         for path in glob.glob(os.path.join(os.path.abspath(media_dir), 'audiosnippets/*')):
             os.unlink(path)
         print(' done.')
 
     # create locations
     print('creating locations and ratings...', end='', flush=True)
-    with open('testdata.csv') as f:
+    with open('testdata.csv', newline='\n') as f:
         csvreader = csv.DictReader(f)
         cnt = 0
         for row in csvreader:
