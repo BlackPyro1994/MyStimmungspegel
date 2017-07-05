@@ -51,20 +51,6 @@ class Location(models.Model):
             self._calc_address()
         super().save(*args, **kwargs)
 
-    def distance_to(self, lat, lon):
-        """
-        Berechnet die Distanz (in Kilometern) zu der durch 'lat' und 'lon'
-        gegebenen Position.
-
-        @param lat  Breitengrad (float)
-        @param lon  Längengrad (float)
-        @return Distanz in km (float)
-        """
-        lat_rad = (self.position_lat + lat) / 2 * 0.01745
-        dx = 111.3 * math.cos(lat_rad) * (self.position_lon - lon)
-        dy = 111.3 * (self.position_lat - lat)
-        return math.sqrt(dx**2 + dy**2)
-
     @property
     def rating(self):
         """
