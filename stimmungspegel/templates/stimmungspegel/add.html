@@ -11,7 +11,7 @@
     {% csrf_token %}
     <div class="form-group">
       <label for="name" class="sr-only">Name des Lokals</label>
-      <input class="form-control" type="text" name="name" placeholder="Name des Lokals">
+      <input class="form-control" type="text" name="name" placeholder="Name des Lokals" required>
     </div>
     <div class="form-group">
       <label for="type">Art des Lokals</label>
@@ -23,20 +23,20 @@
     </div>
     <div class="form-group">
       <label for="admission" class="sr-only">Eintritt</label>
-      <input class="form-control" type="text" name="admission" id="admission" placeholder="Eintritt">
+      <input class="form-control" type="text" name="admission" id="admission" placeholder="Eintritt" required>
     </div>
     <div class="form-group">
       <label for="beer-price" class="sr-only">Bierpreis</label>
-      <input class="form-control" type="text" name="beer_price" id="beer_price" placeholder="Bierpreis">
+      <input class="form-control" type="text" name="beer_price" id="beer_price" placeholder="Bierpreis" required>
     </div>
     <div class="form-group" id="addr">
       <label for="addr">Adresse:</label>
       <label class="sr-only" for="street">Straße</label>
-      <input class="form-control" type="text" name="street" id="street" placeholder="Straße"><br>
+      <input class="form-control" type="text" name="street" id="street" placeholder="Straße" required><br>
       <label class="sr-only" for="zipcode">Postleitzahl</label>
-      <input class="form-control" type="text" name="zipcode" id="zipcode" placeholder="Postleitzahl"><br>
+      <input class="form-control" type="text" name="zipcode" id="zipcode" placeholder="Postleitzahl" required><br>
       <label for="city" class="sr-only">Stadt</label>
-      <input class="form-control" type="text" name="city" id="city" placeholder="Stadt"><br>
+      <input class="form-control" type="text" name="city" id="city" placeholder="Stadt" required><br>
     </div>
     <button type="submit" class="form-control btn btn-primary">Hinzufügen</button>
   </form>
