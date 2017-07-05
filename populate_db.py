@@ -17,6 +17,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stimmungspegel_site.settings')
 django.setup()
 
 from django.conf import settings
+from django.db import IntegrityError
 
 from stimmungspegel.models import Location
 from stimmungspegel.models import Rating
@@ -34,7 +35,7 @@ if __name__ == '__main__':
     # clean media directory
     media_dir = settings.MEDIA_ROOT or None
     if media_dir:
-        print('cleaning MEDIA_ROOT', end='', flush=True)
+        print('cleaning MEDIA_ROOT...', end='', flush=True)
         for path in glob.glob(os.path.join(os.path.abspath(media_dir), 'audiosnippets/*')):
             os.unlink(path)
         print(' done.')
@@ -53,10 +54,14 @@ if __name__ == '__main__':
             location.type = int(row['type'])
             location.admission = row['admission']
             location.beer_price = row['beer_price']
-            location.save()
+            try:
+                location.save()
+                cnt += 1
+            except IntegrityError:
+                continue
             for i in range(10):
                 rating = Rating(location=location)
                 rating.value = random.randint(1, 5)
                 rating.save()
-            cnt += 1
     print(' done.')
+    print('{} locations with ratings were added'.format(cnt))
