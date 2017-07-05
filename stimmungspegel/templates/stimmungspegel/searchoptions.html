@@ -165,6 +165,7 @@
                setCookie("city", document.getElementById("StadtID").value);
                setCookie("zipcode", document.getElementById("PostleitzahlID").value);
                setCookie("address", document.getElementById("StreetID").value);
+               document.getElementById("stadtFormGroup").className = document.getElementById("stadtFormGroup").className.replace("has-error","");
 
             }
             else
