@@ -144,9 +144,16 @@ def add_location(request):
             loc.address = request.POST['street']
             loc.zipcode = request.POST['zipcode']
             loc.city = request.POST['city']
-            loc.save()
+            try:
+                loc.save()
+            except:
+                ctxt = {
+                    'error': 'Adresse ungültig',
+                    'form': request.POST
+                }
+                return render(request, "stimmungspegel/add.html", context=ctxt)
             return HttpResponseRedirect(loc.get_absolute_url())
-        except KeyError:
+        except:
             return HttpResponseBadRequest()
     else:
         return render(request, "stimmungspegel/add.html")

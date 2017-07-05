@@ -11,11 +11,11 @@
     {% csrf_token %}
     <div class="form-group">
       <label for="name" class="sr-only">Name des Lokals</label>
-      <input class="form-control" type="text" name="name" placeholder="Name des Lokals" required>
+      <input class="form-control" type="text" name="name" placeholder="Name des Lokals" value="{{form.name}}" required>
     </div>
     <div class="form-group">
       <label for="type">Art des Lokals</label>
-      <select class="form-control" name="kind" id="kind">
+      <select class="form-control" name="kind" id="type" value="{{form.type}}">
         <option value="0">Kneipe</option>
         <option value="1">Club</option>
         <option value="2">Bar</option>
@@ -23,20 +23,24 @@
     </div>
     <div class="form-group">
       <label for="admission" class="sr-only">Eintritt</label>
-      <input class="form-control" type="text" name="admission" id="admission" placeholder="Eintritt" required>
+      <input class="form-control" type="text" name="admission" id="admission" placeholder="Eintritt" value="{{form.admission}}" required>
     </div>
     <div class="form-group">
       <label for="beer-price" class="sr-only">Bierpreis</label>
-      <input class="form-control" type="text" name="beer_price" id="beer_price" placeholder="Bierpreis" required>
+      <input class="form-control" type="text" name="beer_price" id="beer_price" placeholder="Bierpreis"
+         value="{{form.beer_price}}"required>
     </div>
-    <div class="form-group" id="addr">
+    <div class="form-group {% if error %}has-error{% endif %}" id="addr">
       <label for="addr">Adresse:</label>
+      {% if error %}
+        <p class="text-danger">{{error}}</p>
+      {% endif %}
       <label class="sr-only" for="street">Straße</label>
-      <input class="form-control" type="text" name="street" id="street" placeholder="Straße" required><br>
+      <input class="form-control" type="text" name="street" id="street" placeholder="Straße" value="{{form.street}}" required><br>
       <label class="sr-only" for="zipcode">Postleitzahl</label>
-      <input class="form-control" type="text" name="zipcode" id="zipcode" placeholder="Postleitzahl" required><br>
+      <input class="form-control" type="text" name="zipcode" id="zipcode" placeholder="Postleitzahl" value="{{form.zipcode}}" required><br>
       <label for="city" class="sr-only">Stadt</label>
-      <input class="form-control" type="text" name="city" id="city" placeholder="Stadt" required><br>
+      <input class="form-control" type="text" name="city" id="city" placeholder="Stadt" value="{{form.city}}" required><br>
     </div>
     <button type="submit" class="form-control btn btn-primary">Hinzufügen</button>
   </form>
