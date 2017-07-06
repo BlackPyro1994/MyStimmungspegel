@@ -5,14 +5,14 @@
 {% block content %}
     <div class="row">
         <div class="col-md-8 col-md-offset-2 col-xs-12">
-            <h2>Suchoptionen</h2>
+            <h2 style="color: white;"><u>Suchoptionen</u></h2><br>
         </div>
     </div>
     <div class="col-md-8 col-md-offset-2 col-xs-12">
         <div class="form-horizontal">
             <div class="form-group" id="optionForm">
                 <div class="col-md-4 col-xs-12">
-                    <label for="name">Art der Lokale:</label>
+                    <label for="name" style="color: #d6e9c6;">Art der Lokale:</label>
                 </div>
                 <div class="col-md-8 col-xs-12">
                     <label class="checkbox-inline"><input type="checkbox" id="KneipeID" name="optradio">Kneipen</label>
@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-4 col-xs-12">
-                    <label for="name">Sortieren nach:</label>
+                    <label for="name" style="color: #d6e9c6;">Sortieren nach:</label>
                 </div>
                 <div class="col-md-8 col-xs-12">
                     <label class="radio-inline"><input type="radio" id="StimmungsRadio" checked="true"
@@ -31,10 +31,16 @@
                     <label class="radio-inline"><input type="radio" id="EintrittRadio" name="optradio">Eintritt</label>
                 </div>
             </div>
+
+            {# ############################################################################################################ #}
+
+
             <div class="form-group">
+
                 <div class="col-md-4 col-xs-12">
-                    <label for="name">Lokalisierung:</label>
+                    <label for="name" style="color: #d6e9c6;">Lokalisierung:</label>
                 </div>
+
                 <div class="col-md-8 col-xs-12">
 
                     <label class="radio-inline">
@@ -48,10 +54,12 @@
                 </div>
             </div>
 
+            {# ############################################################################################################ #}
+
             <div class="form-group">
 
                 <div class="col-md-4 col-xs-12">
-                    <label for="name">Suchradius:</label>
+                    <label for="name" style="color: #d6e9c6;">Suchradius:</label>
                 </div>
 
                 <br>
@@ -59,7 +67,7 @@
 
                 {# mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm #}
 
-                <div class="col-md-8 col-xs-12">
+                <div class="col-lg-8 col-lg-offset-2">
 
                     <select class="form-control" id="radius_value">
 
@@ -79,33 +87,48 @@
 
             </div>
 
-            <label for="name">Adresse:</label>
+            {# ############################################################################################################ #}
+
+
+            <label for="name" style="color: #d6e9c6;">Adresse:</label>
 
             <br>
             <br>
 
             <div class="text" id="nachricht"></div>
-            <div class="form-group" id="stadtFormGroup">
-                <form onSubmit="saveAll()">
-                    <input class="form-control" id="city_value" type="text" name="name" placeholder="Stadt">
-                </form>
-            </div>
 
-            <div class="form-group">
-                <form onSubmit="saveAll()">
-                    <input class="form-control" id="zipcode_value" type="text" name="name" placeholder="Postleitzahl">
-                </form>
-            </div>
-
-            <div class="form-group">
-                <form onSubmit="saveAll()">
-                    <input class="form-control" id="street_value" type="text" name="name" placeholder="Straße">
-                </form>
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="form-group" id="stadtFormGroup">
+                    <form onSubmit="saveAll()">
+                        <input class="form-control" id="city_value" type="text" name="name" placeholder="Stadt">
+                    </form>
+                </div>
             </div>
 
 
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="form-group">
+
+                    <form onSubmit="saveAll()">
+                        <input class="form-control" id="zipcode_value" type="text" name="name" placeholder="Postleitzahl">
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-lg-offset-2">
+
+                <div class="form-group">
+                    <form onSubmit="saveAll()">
+                        <input class="form-control" id="street_value" type="text" name="name" placeholder="Straße">
+                    </form>
+                </div>
+                <br>
+            </div>
         </div>
+
+
         <button type="submit" onclick="saveAll()" class="form-control btn btn-primary">Speichern</button>
+
     </div>
     </div>
 {% endblock %}

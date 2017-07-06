@@ -1,0 +1,36 @@
+{% extends "stimmungspegel/base.html" %}
+
+
+{% block title %}{{ block.super }} – Suche{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <!-- Map -->
+        <div class="col-xs-12 col-md-6">
+            <div class="map" id="map"></div>
+        </div>
+
+
+        <div class="col-xs-12 col-md-6">
+
+            <h4 style="font-size: 30px"> Suche (Namen) : </h4>
+
+            <div>
+
+                <div class="form-group">
+
+                    <label for="search-string" class="sr-only">Suchbegriff</label>
+
+                    <input class="form-control" type="text" name="search-string" id="search-string" placeholder="Suchbegriff">
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <div id="location_list"></div>
+
+        </div>
+    </div>
+{% endblock %}

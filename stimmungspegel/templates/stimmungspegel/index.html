@@ -12,10 +12,10 @@
 
             {# <h4 id="sorting-radius"></h4> #}
 
-            <div id="sorting-radius" style="font-size:22px"></div><br>
+            <div id="sorting-radius" style="font-size:22px;color: lightyellow;"></div><br>
 
             <div id="location_list">
-                <div class="text-center" style="font-size: 35px"><br><i class="fa fa-spinner fa-pulse"></i></div>
+                <div class="text-center" style="font-size: 35px;"><br><i class="fa fa-spinner fa-pulse"></i></div>
             </div>
         </div>
     </div>
@@ -93,11 +93,11 @@
 
                         if(locations.length!=0)
                         {
-                            $("#sorting-radius").html(options.orderStr + " im Umkreis von " + radius + "km:");
+                            $("#sorting-radius").html("<u> "+options.orderStr + " im Umkreis von " + radius + "km:");
                         }
                         else
                         {
-                        $("#sorting-radius").html(" Keine Einträge im Umkreis von " + radius + "km: vorhanden !!!");
+                        $("#sorting-radius").html("<br> <u> Keine Einträge im Umkreis von " + radius + "km: vorhanden !!! </u>");
                         }
 
 

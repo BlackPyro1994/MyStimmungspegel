@@ -8,11 +8,17 @@ from stimmungspegel import serializers
 from stimmungspegel.util import bounding_coordinates
 
 
+####################################################################################################################################################
+####################################################################################################################################################
+
 class LocationDetail(DetailView):
     model = models.Location
     template_name = 'stimmungspegel/detail.html'
     context_object_name = 'location'
 
+
+####################################################################################################################################################
+####################################################################################################################################################
 
 def get_locations(request):
     """
@@ -33,14 +39,14 @@ def get_locations(request):
             radius = float(data['radius'])
         except (ValueError, KeyError):
             return HttpResponseBadRequest()
-
+        
         # Vergleichskoordinaten berechnen
         (minLat, minLon, maxLat, maxLon) = bounding_coordinates(lat, lon, radius)
         # Auswahl mit Vergleichskoordinaten eingrenzen
         locations = models.Location.objects
         locations = locations.filter(position_lat__gte=minLat, position_lon__gte=minLon)
         locations = locations.filter(position_lat__lte=maxLat, position_lon__lte=maxLon)
-
+        
         # Auswahl nach Art des Lokals weiter eingrenzen
         if data.get('excludePubs', False):
             locations = locations.exclude(type=0)
@@ -48,7 +54,7 @@ def get_locations(request):
             locations = locations.exclude(type=1)
         if data.get('excludeClubs', False):
             locations = locations.exclude(type=2)
-
+        
         # Sortierung
         sort_method = data.get('order_by', 'r')
         if sort_method == 'b':
@@ -57,12 +63,15 @@ def get_locations(request):
             locations = locations.order_by('admission')
         else:
             locations = locations.annotate(r=Avg('rating__value')).order_by('-r')
-
+        
         # print(locations.query)
         ser = serializers.LocationSerializer(locations, many=True)
         return JsonResponse(ser.data, safe=False)
     return HttpResponseNotAllowed(['GET'])
 
+
+####################################################################################################################################################
+####################################################################################################################################################
 
 def rate(request, location_id):
     if request.method == 'POST' and request.is_ajax():
@@ -75,11 +84,17 @@ def rate(request, location_id):
     return HttpResponseNotAllowed(['POST'])
 
 
+####################################################################################################################################################
+####################################################################################################################################################
+
 def get_ratings(request, location_id):
     ratings = models.Rating.objects.filter(location_id=location_id).order_by('-date')[:20]
     ser = serializers.RatingSerializer(ratings, many=True)
     return JsonResponse(ser.data, safe=False)
 
+
+####################################################################################################################################################
+####################################################################################################################################################
 
 def upload_audio(request, location_id):
     if request.method == 'POST' and request.is_ajax():
@@ -92,6 +107,9 @@ def upload_audio(request, location_id):
     return HttpResponseNotAllowed(['POST'])
 
 
+####################################################################################################################################################
+####################################################################################################################################################
+
 def search(request):
     if request.is_ajax() and request.method == 'GET':
         data = request.GET
@@ -102,16 +120,16 @@ def search(request):
             radius = float(data['radius'])
         except (ValueError, KeyError):
             return HttpResponseBadRequest()
-
+        
         # Mit dem Suchbegriff nach Namen filtern
         locations = models.Location.objects.filter(name__icontains=query)
-
+        
         # Vergleichskoordinaten berechnen
         minLat, minLon, maxLat, maxLon = bounding_coordinates(lat, lon, radius)
         # Auswahl mit Vergleichskoordinaten eingrenzen
         locations = locations.filter(position_lat__gte=minLat, position_lon__gte=minLon)
         locations = locations.filter(position_lat__lte=maxLat, position_lon__lte=maxLon)
-
+        
         # Auswahl nach Art des Lokals weiter eingrenzen
         if data.get('excludePubs', False):
             locations = locations.exclude(type=0)
@@ -119,7 +137,7 @@ def search(request):
             locations = locations.exclude(type=1)
         if data.get('excludeClubs', False):
             locations = locations.exclude(type=2)
-
+        
         # Sortierung
         sort_method = data.get('order_by', 'r')
         if sort_method == 'b':
@@ -128,11 +146,14 @@ def search(request):
             locations = locations.order_by('admission')
         else:
             locations = locations.annotate(r=Avg('rating__value')).order_by('-r')
-
+        
         ser = serializers.LocationSerializer(locations, many=True)
         return JsonResponse(ser.data, safe=False)
     return HttpResponseNotAllowed(['GET'])
 
+
+####################################################################################################################################################
+####################################################################################################################################################
 
 def add_location(request):
     if request.method == 'POST':
@@ -158,3 +179,31 @@ def add_location(request):
             return HttpResponseBadRequest()
     else:
         return render(request, "stimmungspegel/add.html")
+    
+###################################################################################################################################################
+###################################################################################################################################################
+
+def delete_location(request):
+    if request.method == 'DELETE':
+        try:
+            loc = models.Location()
+            loc.name = request.POST['name']
+            loc.type = int(request.POST['kind'])
+            loc.admission = request.POST['admission']
+            loc.beer_price = request.POST['beer_price']
+            loc.address = request.POST['street']
+            loc.zipcode = request.POST['zipcode']
+            loc.city = request.POST['city']
+            try:
+                loc.delete();
+            except IntegrityError:
+                ctxt = {
+                    'error': 'Adresse ungültig',
+                    'form': request.POST
+                }
+                return render(request, "stimmungspegel/delete.html", context=ctxt)
+            return HttpResponseRedirect(loc.get_absolute_url())
+        except (KeyError, ValueError):
+            return HttpResponseBadRequest()
+    else:
+        return render(request, "stimmungspegel/delete.html")
